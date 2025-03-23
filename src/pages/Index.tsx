@@ -1,7 +1,7 @@
 
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
-import Hero from "@/components/home/Hero";
+import ImageCarousel from "@/components/home/ImageCarousel";
 import CoursePreview from "@/components/home/CoursePreview";
 import Statistics from "@/components/home/Statistics";
 import Testimonials from "@/components/home/Testimonials";
@@ -15,8 +15,10 @@ const Index = () => {
       <Navbar />
       
       <main className="flex-1">
-        {/* Hero Section */}
-        <Hero />
+        {/* Image Carousel */}
+        <section className="relative overflow-hidden pt-16">
+          <ImageCarousel />
+        </section>
         
         {/* Course Categories */}
         <section className="section-padding">
@@ -34,19 +36,19 @@ const Index = () => {
               {[
                 {
                   title: "NEET",
-                  description: "Comprehensive preparation for medical entrance exams",
+                  description: "Medical MBBS - Comprehensive preparation for medical entrance exams",
                   icon: <GraduationCap className="h-8 w-8" />,
                   href: "/neet"
                 },
                 {
                   title: "JEE",
-                  description: "Expert-led courses for engineering entrance exams",
+                  description: "Engineering - Expert-led courses for engineering entrance exams",
                   icon: <Book className="h-8 w-8" />,
                   href: "/jee"
                 },
                 {
                   title: "IIT-M BS",
-                  description: "Resources for IIT Madras BS Degree programs",
+                  description: "UG - Resources for IIT Madras BS Degree programs",
                   icon: <PenTool className="h-8 w-8" />,
                   href: "/iitm-bs"
                 }
