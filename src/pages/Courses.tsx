@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
@@ -250,9 +249,9 @@ const Courses = () => {
                   hover 
                   clickable 
                   className={cn(
-                    "overflow-hidden animate-slide-up",
+                    "overflow-hidden group",
                     course.featured ? "border-primary/50" : "",
-                    `animate-delay-${Math.min(index * 100, 500)}`
+                    `animate-slide-up animate-delay-${Math.min(index * 100, 500)}`
                   )}
                 >
                   <div className="relative aspect-[16/9] overflow-hidden">
@@ -308,16 +307,19 @@ const Courses = () => {
                         />
                       </form>
                     )}
-                    <Link to={`/courses/${course.id}`} className="w-full">
-                      <ButtonCustom 
-                        fullWidth 
-                        icon={<ArrowRight />} 
-                        iconPosition="right"
-                        variant={course.featured ? "primary" : "outline"}
-                      >
-                        {course.free ? "Start Learning" : "View Details"}
-                      </ButtonCustom>
-                    </Link>
+                    {course.free && (
+                      <Link to={`/courses/${course.id}`} className="w-full">
+                        <ButtonCustom 
+                          fullWidth 
+                          icon={<ArrowRight />} 
+                          iconPosition="right"
+                          variant="primary"
+                          className="bg-gradient-to-r from-green-400 to-green-500 hover:from-green-500 hover:to-green-600 shadow-lg hover:shadow-xl transition-all duration-300"
+                        >
+                          Start Learning
+                        </ButtonCustom>
+                      </Link>
+                    )}
                   </CardFooter>
                 </CardCustom>
               ))}

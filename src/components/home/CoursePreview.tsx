@@ -38,7 +38,7 @@ const CourseCard = ({
       hover 
       clickable 
       className={cn(
-        "overflow-hidden",
+        "overflow-hidden group",
         featured ? "border-primary/50" : "",
         "animate-slide-up",
         `animate-delay-${Math.min(index * 100, 500)}`
@@ -89,17 +89,28 @@ const CourseCard = ({
         </div>
       </CardContent>
       
-      <CardFooter>
-        <Link to={`/courses/${id}`} className="w-full">
-          <ButtonCustom 
-            fullWidth 
-            icon={<ArrowRight />} 
-            iconPosition="right"
-            variant={featured ? "primary" : "outline"}
-          >
-            {free ? "Start Learning" : "View Course"}
-          </ButtonCustom>
-        </Link>
+      <CardFooter className="flex flex-col gap-4">
+        {!free ? (
+          <form className="w-full">
+            <script 
+              src="https://checkout.razorpay.com/v1/payment-button.js" 
+              data-payment_button_id="pl_QLFKugV18DUp8V" 
+              async
+            />
+          </form>
+        ) : (
+          <Link to={`/courses/${id}`} className="w-full">
+            <ButtonCustom 
+              fullWidth 
+              icon={<ArrowRight />} 
+              iconPosition="right"
+              variant="primary"
+              className="bg-gradient-to-r from-green-400 to-green-500 hover:from-green-500 hover:to-green-600 shadow-lg hover:shadow-xl transition-all duration-300"
+            >
+              Start Learning
+            </ButtonCustom>
+          </Link>
+        )}
       </CardFooter>
     </CardCustom>
   );
