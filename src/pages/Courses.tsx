@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+
+import React, { useState, useEffect, useRef } from "react";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { CardCustom, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card-custom";
@@ -101,6 +102,108 @@ const coursesData = [
   },
 ];
 
+interface CourseCardProps {
+  course: typeof coursesData[0];
+  index: number;
+}
+
+const CourseCard = ({ course, index }: CourseCardProps) => {
+  const paymentFormRef = useRef<HTMLFormElement>(null);
+
+  useEffect(() => {
+    if (!course.free && paymentFormRef.current) {
+      const script = document.createElement('script');
+      script.src = 'https://checkout.razorpay.com/v1/payment-button.js';
+      script.setAttribute('data-payment_button_id', 'pl_QLFKugV18DUp8V');
+      script.async = true;
+      
+      // Clear the form and append the new script
+      if (paymentFormRef.current.hasChildNodes()) {
+        paymentFormRef.current.innerHTML = '';
+      }
+      paymentFormRef.current.appendChild(script);
+    }
+  }, [course.free]);
+
+  return (
+    <CardCustom 
+      key={course.id}
+      glass 
+      hover 
+      clickable 
+      className={cn(
+        "overflow-hidden group",
+        course.featured ? "border-primary/50" : "",
+        `animate-slide-up animate-delay-${Math.min(index * 100, 500)}`
+      )}
+    >
+      <div className="relative aspect-[16/9] overflow-hidden">
+        <img 
+          src={course.image} 
+          alt={course.title}
+          className="object-cover w-full h-full transition-transform duration-500 hover:scale-105"
+        />
+        <div className="absolute top-4 left-4 bg-background/80 backdrop-blur-sm text-xs font-medium px-2.5 py-1 rounded-full">
+          {course.category}
+        </div>
+        {course.featured && (
+          <div className="absolute top-4 right-4 bg-primary text-primary-foreground text-xs font-medium px-2.5 py-1 rounded-full">
+            Featured
+          </div>
+        )}
+        {course.free && (
+          <div className="absolute bottom-4 left-4 bg-green-500 text-white text-xs font-medium px-2.5 py-1 rounded-full">
+            Free
+          </div>
+        )}
+      </div>
+      
+      <CardHeader>
+        <CardTitle className="line-clamp-1">{course.title}</CardTitle>
+        <CardDescription className="line-clamp-2">{course.description}</CardDescription>
+      </CardHeader>
+      
+      <CardContent>
+        <div className="grid grid-cols-3 gap-2 text-sm text-muted-foreground">
+          <div className="flex items-center gap-1.5">
+            <Clock className="h-3.5 w-3.5" />
+            <span>{course.duration}</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <Users className="h-3.5 w-3.5" />
+            <span>{course.students.toLocaleString()}</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <BookOpen className="h-3.5 w-3.5" />
+            <span>{course.lessons} lessons</span>
+          </div>
+        </div>
+      </CardContent>
+      
+      <CardFooter className="flex flex-col gap-4">
+        {!course.free && (
+          <form className="w-full" ref={paymentFormRef}>
+            {/* Razorpay script will be injected here */}
+          </form>
+        )}
+        {course.free && (
+          <Link to={`/courses/${course.id}`} className="w-full">
+            <ButtonCustom 
+              fullWidth 
+              icon={<ArrowRight />} 
+              iconPosition="right"
+              variant="primary"
+              className="bg-gradient-to-r from-green-400 to-green-500 hover:from-green-500 hover:to-green-600 shadow-lg hover:shadow-xl transition-all duration-300"
+            >
+              Start Learning
+            </ButtonCustom>
+          </Link>
+        )}
+      </CardFooter>
+    </CardCustom>
+  );
+};
+
 const Courses = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [categoryFilter, setCategoryFilter] = useState<string | null>(null);
@@ -126,18 +229,6 @@ const Courses = () => {
   };
   
   const hasActiveFilters = searchTerm || categoryFilter || showFreeOnly;
-  
-  useEffect(() => {
-    const script = document.createElement('script');
-    script.src = 'https://checkout.razorpay.com/v1/payment-button.js';
-    script.setAttribute('data-payment_button_id', 'pl_QLFKugV18DUp8V');
-    script.async = true;
-    document.body.appendChild(script);
-
-    return () => {
-      document.body.removeChild(script);
-    };
-  }, []);
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -243,85 +334,7 @@ const Courses = () => {
           {filteredCourses.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {filteredCourses.map((course, index) => (
-                <CardCustom 
-                  key={course.id}
-                  glass 
-                  hover 
-                  clickable 
-                  className={cn(
-                    "overflow-hidden group",
-                    course.featured ? "border-primary/50" : "",
-                    `animate-slide-up animate-delay-${Math.min(index * 100, 500)}`
-                  )}
-                >
-                  <div className="relative aspect-[16/9] overflow-hidden">
-                    <img 
-                      src={course.image} 
-                      alt={course.title}
-                      className="object-cover w-full h-full transition-transform duration-500 hover:scale-105"
-                    />
-                    <div className="absolute top-4 left-4 bg-background/80 backdrop-blur-sm text-xs font-medium px-2.5 py-1 rounded-full">
-                      {course.category}
-                    </div>
-                    {course.featured && (
-                      <div className="absolute top-4 right-4 bg-primary text-primary-foreground text-xs font-medium px-2.5 py-1 rounded-full">
-                        Featured
-                      </div>
-                    )}
-                    {course.free && (
-                      <div className="absolute bottom-4 left-4 bg-green-500 text-white text-xs font-medium px-2.5 py-1 rounded-full">
-                        Free
-                      </div>
-                    )}
-                  </div>
-                  
-                  <CardHeader>
-                    <CardTitle className="line-clamp-1">{course.title}</CardTitle>
-                    <CardDescription className="line-clamp-2">{course.description}</CardDescription>
-                  </CardHeader>
-                  
-                  <CardContent>
-                    <div className="grid grid-cols-3 gap-2 text-sm text-muted-foreground">
-                      <div className="flex items-center gap-1.5">
-                        <Clock className="h-3.5 w-3.5" />
-                        <span>{course.duration}</span>
-                      </div>
-                      <div className="flex items-center gap-1.5">
-                        <Users className="h-3.5 w-3.5" />
-                        <span>{course.students.toLocaleString()}</span>
-                      </div>
-                      <div className="flex items-center gap-1.5">
-                        <BookOpen className="h-3.5 w-3.5" />
-                        <span>{course.lessons} lessons</span>
-                      </div>
-                    </div>
-                  </CardContent>
-                  
-                  <CardFooter className="flex flex-col gap-4">
-                    {!course.free && (
-                      <form className="w-full">
-                        <script
-                          src="https://checkout.razorpay.com/v1/payment-button.js"
-                          data-payment_button_id="pl_QLFKugV18DUp8V"
-                          async
-                        />
-                      </form>
-                    )}
-                    {course.free && (
-                      <Link to={`/courses/${course.id}`} className="w-full">
-                        <ButtonCustom 
-                          fullWidth 
-                          icon={<ArrowRight />} 
-                          iconPosition="right"
-                          variant="primary"
-                          className="bg-gradient-to-r from-green-400 to-green-500 hover:from-green-500 hover:to-green-600 shadow-lg hover:shadow-xl transition-all duration-300"
-                        >
-                          Start Learning
-                        </ButtonCustom>
-                      </Link>
-                    )}
-                  </CardFooter>
-                </CardCustom>
+                <CourseCard key={course.id} course={course} index={index} />
               ))}
             </div>
           ) : (

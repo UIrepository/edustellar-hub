@@ -4,6 +4,7 @@ import { ButtonCustom } from "@/components/ui/button-custom";
 import { Clock, Users, BookOpen, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
+import { useEffect, useRef } from "react";
 
 interface CourseCardProps {
   id: string;
@@ -32,6 +33,23 @@ const CourseCard = ({
   featured = false,
   index = 0 
 }: CourseCardProps) => {
+  const paymentFormRef = useRef<HTMLFormElement>(null);
+
+  useEffect(() => {
+    if (!free && paymentFormRef.current) {
+      const script = document.createElement('script');
+      script.src = 'https://checkout.razorpay.com/v1/payment-button.js';
+      script.setAttribute('data-payment_button_id', 'pl_QLFKugV18DUp8V');
+      script.async = true;
+      
+      // Clear the form and append the new script
+      if (paymentFormRef.current.hasChildNodes()) {
+        paymentFormRef.current.innerHTML = '';
+      }
+      paymentFormRef.current.appendChild(script);
+    }
+  }, [free]);
+
   return (
     <CardCustom 
       glass 
@@ -91,12 +109,8 @@ const CourseCard = ({
       
       <CardFooter className="flex flex-col gap-4">
         {!free ? (
-          <form className="w-full">
-            <script 
-              src="https://checkout.razorpay.com/v1/payment-button.js" 
-              data-payment_button_id="pl_QLFKugV18DUp8V" 
-              async
-            />
+          <form className="w-full" ref={paymentFormRef}>
+            {/* Razorpay script will be injected here */}
           </form>
         ) : (
           <Link to={`/courses/${id}`} className="w-full">
