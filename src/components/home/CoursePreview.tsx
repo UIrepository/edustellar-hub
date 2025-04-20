@@ -1,3 +1,4 @@
+
 import React, { useEffect, useRef, useState } from "react";
 import { CardCustom, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from "@/components/ui/card-custom";
 import { ButtonCustom } from "@/components/ui/button-custom";
@@ -34,6 +35,7 @@ const CourseCard = ({
 }: CourseCardProps) => {
   const paymentFormRef = useRef<HTMLFormElement>(null);
   const [showPayment, setShowPayment] = useState(false);
+  const [isPaymentLoaded, setIsPaymentLoaded] = useState(false);
 
   useEffect(() => {
     if (!free && showPayment && paymentFormRef.current) {
@@ -41,6 +43,10 @@ const CourseCard = ({
       script.src = 'https://checkout.razorpay.com/v1/payment-button.js';
       script.setAttribute('data-payment_button_id', 'pl_QLFKugV18DUp8V');
       script.async = true;
+      
+      script.onload = () => {
+        setIsPaymentLoaded(true);
+      };
       
       // Clear the form and append the new script
       if (paymentFormRef.current.hasChildNodes()) {
@@ -118,9 +124,24 @@ const CourseCard = ({
             Enroll Now
           </ButtonCustom>
         ) : !free && showPayment ? (
-          <form className="w-full" ref={paymentFormRef}>
-            {/* Razorpay script will be injected here */}
-          </form>
+          <>
+            <div className="w-full" style={{ display: isPaymentLoaded ? 'block' : 'none' }}>
+              <form ref={paymentFormRef}>
+                {/* Razorpay script will be injected here */}
+              </form>
+            </div>
+            {!isPaymentLoaded && (
+              <div className="w-full flex justify-center">
+                <div className="animate-spin h-6 w-6 border-2 border-primary border-t-transparent rounded-full"></div>
+              </div>
+            )}
+            <button 
+              onClick={() => setShowPayment(false)}
+              className="text-sm text-muted-foreground hover:text-foreground mt-2"
+            >
+              Cancel
+            </button>
+          </>
         ) : (
           <Link to={`/courses/${id}`} className="w-full">
             <ButtonCustom 

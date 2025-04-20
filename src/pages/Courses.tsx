@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from "react";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
@@ -109,13 +108,19 @@ interface CourseCardProps {
 
 const CourseCard = ({ course, index }: CourseCardProps) => {
   const paymentFormRef = useRef<HTMLFormElement>(null);
+  const [showPayment, setShowPayment] = useState(false);
+  const [isPaymentLoaded, setIsPaymentLoaded] = useState(false);
 
   useEffect(() => {
-    if (!course.free && paymentFormRef.current) {
+    if (!course.free && showPayment && paymentFormRef.current) {
       const script = document.createElement('script');
       script.src = 'https://checkout.razorpay.com/v1/payment-button.js';
       script.setAttribute('data-payment_button_id', 'pl_QLFKugV18DUp8V');
       script.async = true;
+      
+      script.onload = () => {
+        setIsPaymentLoaded(true);
+      };
       
       // Clear the form and append the new script
       if (paymentFormRef.current.hasChildNodes()) {
@@ -123,7 +128,7 @@ const CourseCard = ({ course, index }: CourseCardProps) => {
       }
       paymentFormRef.current.appendChild(script);
     }
-  }, [course.free]);
+  }, [course.free, showPayment]);
 
   return (
     <CardCustom 
@@ -181,12 +186,35 @@ const CourseCard = ({ course, index }: CourseCardProps) => {
       </CardContent>
       
       <CardFooter className="flex flex-col gap-4">
-        {!course.free && (
-          <form className="w-full" ref={paymentFormRef}>
-            {/* Razorpay script will be injected here */}
-          </form>
-        )}
-        {course.free && (
+        {!course.free && !showPayment ? (
+          <ButtonCustom 
+            fullWidth 
+            variant="primary"
+            onClick={() => setShowPayment(true)}
+            className="bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 text-white shadow-lg hover:shadow-xl transition-all duration-300"
+          >
+            Enroll Now
+          </ButtonCustom>
+        ) : !course.free && showPayment ? (
+          <>
+            <div className="w-full" style={{ display: isPaymentLoaded ? 'block' : 'none' }}>
+              <form ref={paymentFormRef}>
+                {/* Razorpay script will be injected here */}
+              </form>
+            </div>
+            {!isPaymentLoaded && (
+              <div className="w-full flex justify-center">
+                <div className="animate-spin h-6 w-6 border-2 border-primary border-t-transparent rounded-full"></div>
+              </div>
+            )}
+            <button 
+              onClick={() => setShowPayment(false)}
+              className="text-sm text-muted-foreground hover:text-foreground mt-2"
+            >
+              Cancel
+            </button>
+          </>
+        ) : course.free && (
           <Link to={`/courses/${course.id}`} className="w-full">
             <ButtonCustom 
               fullWidth 
