@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
@@ -127,7 +128,7 @@ const Courses = () => {
   
   const hasActiveFilters = searchTerm || categoryFilter || showFreeOnly;
   
-  React.useEffect(() => {
+  useEffect(() => {
     const script = document.createElement('script');
     script.src = 'https://checkout.razorpay.com/v1/payment-button.js';
     script.setAttribute('data-payment_button_id', 'pl_QLFKugV18DUp8V');

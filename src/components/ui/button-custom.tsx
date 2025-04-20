@@ -1,8 +1,9 @@
+
 import * as React from "react";
 import { cn } from "@/lib/utils";
 
 interface ButtonCustomProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "primary" | "secondary" | "outline" | "ghost" | "link";
+  variant?: "primary" | "secondary" | "outline" | "ghost" | "link" | "destructive";
   size?: "sm" | "md" | "lg" | "icon";
   isLoading?: boolean;
   loadingText?: string;
@@ -37,6 +38,7 @@ const ButtonCustom = React.forwardRef<HTMLButtonElement, ButtonCustomProps>(
       outline: "border border-input bg-transparent hover:bg-accent hover:text-accent-foreground",
       ghost: "hover:bg-accent hover:text-accent-foreground",
       link: "underline-offset-4 hover:underline text-primary",
+      destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90 active:bg-destructive/80",
     };
     
     const sizes = {
@@ -89,7 +91,7 @@ const ButtonCustom = React.forwardRef<HTMLButtonElement, ButtonCustomProps>(
         {icon && iconPosition === "left" && !isLoading && (
           <span className="mr-2 transition-transform duration-300 group-hover:-translate-x-0.5">{icon}</span>
         )}
-        {children}
+        {isLoading && loadingText ? loadingText : children}
         {icon && iconPosition === "right" && (
           <span className="ml-2 transition-transform duration-300 group-hover:translate-x-0.5">{icon}</span>
         )}
