@@ -34,9 +34,10 @@ const CourseCard = ({
   index = 0 
 }: CourseCardProps) => {
   const paymentFormRef = useRef<HTMLFormElement>(null);
+  const [showPayment, setShowPayment] = useState(false);
 
   useEffect(() => {
-    if (!free && paymentFormRef.current) {
+    if (!free && showPayment && paymentFormRef.current) {
       const script = document.createElement('script');
       script.src = 'https://checkout.razorpay.com/v1/payment-button.js';
       script.setAttribute('data-payment_button_id', 'pl_QLFKugV18DUp8V');
@@ -48,7 +49,7 @@ const CourseCard = ({
       }
       paymentFormRef.current.appendChild(script);
     }
-  }, [free]);
+  }, [free, showPayment]);
 
   return (
     <CardCustom 
@@ -108,7 +109,16 @@ const CourseCard = ({
       </CardContent>
       
       <CardFooter className="flex flex-col gap-4">
-        {!free ? (
+        {!free && !showPayment ? (
+          <ButtonCustom 
+            fullWidth 
+            variant="primary"
+            onClick={() => setShowPayment(true)}
+            className="bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 text-white shadow-lg hover:shadow-xl transition-all duration-300"
+          >
+            Enroll Now
+          </ButtonCustom>
+        ) : !free && showPayment ? (
           <form className="w-full" ref={paymentFormRef}>
             {/* Razorpay script will be injected here */}
           </form>
