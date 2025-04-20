@@ -1,4 +1,3 @@
-
 import * as React from "react";
 import { cn } from "@/lib/utils";
 
@@ -6,6 +5,7 @@ interface ButtonCustomProps extends React.ButtonHTMLAttributes<HTMLButtonElement
   variant?: "primary" | "secondary" | "outline" | "ghost" | "link";
   size?: "sm" | "md" | "lg" | "icon";
   isLoading?: boolean;
+  loadingText?: string;
   icon?: React.ReactNode;
   iconPosition?: "left" | "right";
   fullWidth?: boolean;
@@ -19,6 +19,7 @@ const ButtonCustom = React.forwardRef<HTMLButtonElement, ButtonCustomProps>(
       variant = "primary",
       size = "md",
       isLoading = false,
+      loadingText,
       icon,
       iconPosition = "left",
       fullWidth = false,

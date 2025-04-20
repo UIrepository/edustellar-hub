@@ -1,5 +1,4 @@
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { CardCustom, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card-custom";
@@ -8,8 +7,8 @@ import { Clock, Users, BookOpen, Search, X, ArrowRight, Filter } from "lucide-re
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 
-// Sample course data - to be replaced with API calls in final implementation
 const coursesData = [
+  // Sample course data - to be replaced with API calls in final implementation
   {
     id: "neet-crash-course",
     title: "NEET Crash Course 2023",
@@ -107,7 +106,6 @@ const Courses = () => {
   const [categoryFilter, setCategoryFilter] = useState<string | null>(null);
   const [showFreeOnly, setShowFreeOnly] = useState(false);
   
-  // Filter courses based on search, category, and free/paid status
   const filteredCourses = coursesData.filter((course) => {
     const matchesSearch = course.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
                          course.description.toLowerCase().includes(searchTerm.toLowerCase());
@@ -127,15 +125,25 @@ const Courses = () => {
     setShowFreeOnly(false);
   };
   
-  // Check if any filters are active
   const hasActiveFilters = searchTerm || categoryFilter || showFreeOnly;
   
+  React.useEffect(() => {
+    const script = document.createElement('script');
+    script.src = 'https://checkout.razorpay.com/v1/payment-button.js';
+    script.setAttribute('data-payment_button_id', 'pl_QLFKugV18DUp8V');
+    script.async = true;
+    document.body.appendChild(script);
+
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
       
       <main className="flex-1 pt-24">
-        {/* Header */}
         <div className="bg-secondary/30">
           <div className="container mx-auto py-12 px-4">
             <div className="max-w-3xl">
@@ -149,10 +157,8 @@ const Courses = () => {
           </div>
         </div>
         
-        {/* Search and Filters */}
         <div className="container mx-auto py-8 px-4">
           <div className="flex flex-col md:flex-row gap-4 mb-8">
-            {/* Search */}
             <div className="relative flex-1">
               <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
                 <Search className="h-5 w-5 text-muted-foreground" />
@@ -175,7 +181,6 @@ const Courses = () => {
               )}
             </div>
             
-            {/* Category filter */}
             <div className="flex flex-wrap gap-2">
               {categories.map((category) => (
                 <ButtonCustom
@@ -188,7 +193,6 @@ const Courses = () => {
                 </ButtonCustom>
               ))}
               
-              {/* Free courses toggle */}
               <ButtonCustom
                 variant={showFreeOnly ? "primary" : "outline"}
                 size="sm"
@@ -197,7 +201,6 @@ const Courses = () => {
                 Free Courses
               </ButtonCustom>
               
-              {/* Reset filters */}
               {hasActiveFilters && (
                 <ButtonCustom
                   variant="ghost"
@@ -210,38 +213,33 @@ const Courses = () => {
             </div>
           </div>
           
-          {/* Active filters display */}
-          {hasActiveFilters && (
-            <div className="flex items-center gap-2 mb-6 text-sm">
-              <Filter className="h-4 w-4 text-muted-foreground" />
-              <span className="text-muted-foreground">Filters:</span>
-              
-              {searchTerm && (
-                <div className="bg-primary/10 text-primary rounded-full px-3 py-1">
-                  Search: "{searchTerm}"
-                </div>
-              )}
-              
-              {categoryFilter && (
-                <div className="bg-primary/10 text-primary rounded-full px-3 py-1">
-                  Category: {categoryFilter}
-                </div>
-              )}
-              
-              {showFreeOnly && (
-                <div className="bg-primary/10 text-primary rounded-full px-3 py-1">
-                  Free Courses Only
-                </div>
-              )}
-            </div>
-          )}
+          <div className="flex items-center gap-2 mb-6 text-sm">
+            <Filter className="h-4 w-4 text-muted-foreground" />
+            <span className="text-muted-foreground">Filters:</span>
+            
+            {searchTerm && (
+              <div className="bg-primary/10 text-primary rounded-full px-3 py-1">
+                Search: "{searchTerm}"
+              </div>
+            )}
+            
+            {categoryFilter && (
+              <div className="bg-primary/10 text-primary rounded-full px-3 py-1">
+                Category: {categoryFilter}
+              </div>
+            )}
+            
+            {showFreeOnly && (
+              <div className="bg-primary/10 text-primary rounded-full px-3 py-1">
+                Free Courses Only
+              </div>
+            )}
+          </div>
           
-          {/* Results count */}
           <p className="text-muted-foreground mb-6">
             Showing {filteredCourses.length} {filteredCourses.length === 1 ? 'course' : 'courses'}
           </p>
           
-          {/* Course grid */}
           {filteredCourses.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {filteredCourses.map((course, index) => (
@@ -256,14 +254,12 @@ const Courses = () => {
                     `animate-delay-${Math.min(index * 100, 500)}`
                   )}
                 >
-                  {/* Course image */}
                   <div className="relative aspect-[16/9] overflow-hidden">
                     <img 
                       src={course.image} 
                       alt={course.title}
                       className="object-cover w-full h-full transition-transform duration-500 hover:scale-105"
                     />
-                    {/* Category tag */}
                     <div className="absolute top-4 left-4 bg-background/80 backdrop-blur-sm text-xs font-medium px-2.5 py-1 rounded-full">
                       {course.category}
                     </div>
@@ -301,7 +297,16 @@ const Courses = () => {
                     </div>
                   </CardContent>
                   
-                  <CardFooter>
+                  <CardFooter className="flex flex-col gap-4">
+                    {!course.free && (
+                      <form className="w-full">
+                        <script
+                          src="https://checkout.razorpay.com/v1/payment-button.js"
+                          data-payment_button_id="pl_QLFKugV18DUp8V"
+                          async
+                        />
+                      </form>
+                    )}
                     <Link to={`/courses/${course.id}`} className="w-full">
                       <ButtonCustom 
                         fullWidth 
@@ -309,7 +314,7 @@ const Courses = () => {
                         iconPosition="right"
                         variant={course.featured ? "primary" : "outline"}
                       >
-                        {course.free ? "Start Learning" : "View Course"}
+                        {course.free ? "Start Learning" : "View Details"}
                       </ButtonCustom>
                     </Link>
                   </CardFooter>
