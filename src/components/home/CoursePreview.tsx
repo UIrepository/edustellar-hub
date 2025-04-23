@@ -1,10 +1,10 @@
-
 import React, { useState } from "react";
 import { CardCustom, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from "@/components/ui/card-custom";
 import { ButtonCustom } from "@/components/ui/button-custom";
 import { Clock, Users, BookOpen, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
+import { useToast } from "@/hooks/use-toast";
 
 interface CourseCardProps {
   id: string;
@@ -72,6 +72,7 @@ const CourseCard = ({
 }: CourseCardProps) => {
   const [showPayNow, setShowPayNow] = useState(false);
   const [isPaymentLoading, setIsPaymentLoading] = useState(false);
+  const { toast } = useToast();
 
   const price = getCoursePrice(id);
   const isPaid = !free;
@@ -82,35 +83,66 @@ const CourseCard = ({
 
   const handlePayNow = async () => {
     setIsPaymentLoading(true);
-    await loadRazorpayScript();
-    setIsPaymentLoading(false);
+    try {
+      await loadRazorpayScript();
+      setIsPaymentLoading(false);
 
-    const options = {
-      key: RAZORPAY_KEY_ID,
-      amount: price * 100, // in paise
-      currency: "INR",
-      name: title,
-      description: "Course enrollment fee",
-      image: image,
-      handler: function (response: any) {
-        alert("Payment successful! Payment Id: " + response.razorpay_payment_id);
-      },
-      prefill: {
-        name: "", // Optionally, student's name/email
-        email: "",
-      },
-      theme: {
-        color: "#6366f1",
-      },
-      modal: {
-        ondismiss: function () {
-          setShowPayNow(false);
+      const options = {
+        key: RAZORPAY_KEY_ID,
+        amount: price * 100, // in paise
+        currency: "INR",
+        name: title,
+        description: "Course enrollment fee",
+        image: image,
+        handler: function (response: any) {
+          toast({
+            title: "Payment Successful!",
+            description: `Your payment for ${title} is complete. Payment ID: ${response.razorpay_payment_id}`,
+            variant: "default",
+          });
+          
+          console.log("Payment success:", response);
+        },
+        prefill: {
+          name: "", // Optionally, student's name/email
+          email: "",
+        },
+        theme: {
+          color: "#6366f1",
+        },
+        modal: {
+          ondismiss: function () {
+            setShowPayNow(false);
+            toast({
+              title: "Payment Cancelled",
+              description: "You have cancelled the payment process.",
+              variant: "default",
+            });
+          }
         }
-      }
-    };
+      };
 
-    const rzp = new window.Razorpay(options);
-    rzp.open();
+      const rzp = new window.Razorpay(options);
+      
+      rzp.on('payment.failed', function (response: any) {
+        toast({
+          title: "Payment Failed",
+          description: `Error: ${response.error.description}`,
+          variant: "destructive",
+        });
+        console.error("Payment failed:", response.error);
+      });
+      
+      rzp.open();
+    } catch (error) {
+      setIsPaymentLoading(false);
+      toast({
+        title: "Error",
+        description: "Failed to load payment gateway. Please try again.",
+        variant: "destructive",
+      });
+      console.error("Razorpay error:", error);
+    }
   };
 
   return (
