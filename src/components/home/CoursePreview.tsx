@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { CardCustom, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from "@/components/ui/card-custom";
 import { ButtonCustom } from "@/components/ui/button-custom";
@@ -27,7 +28,7 @@ declare global {
 }
 
 // Only publishable key is used
-const RAZORPAY_KEY_ID = "rzp_test_GIseZSACajcrW0";
+const RAZORPAY_KEY_ID = "rzp_live_vaLIiJidPPfFlr";
 
 // Set pricing by course id
 const getCoursePrice = (id: string): number => {
