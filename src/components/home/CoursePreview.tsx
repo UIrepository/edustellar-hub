@@ -1,5 +1,4 @@
-
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import { CardCustom, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from "@/components/ui/card-custom";
 import { ButtonCustom } from "@/components/ui/button-custom";
 import { Clock, Users, BookOpen, ArrowRight } from "lucide-react";
@@ -20,47 +19,80 @@ interface CourseCardProps {
   index?: number;
 }
 
-const CourseCard = ({ 
-  id, 
-  title, 
-  description, 
-  category, 
-  image, 
-  duration, 
-  students, 
-  lessons, 
+declare global {
+  interface Window {
+    Razorpay: any;
+  }
+}
+
+const RAZORPAY_KEY_ID = "rzp_test_GIseZSACajcrW0";
+
+const loadRazorpayScript = (): Promise<void> => {
+  return new Promise((resolve) => {
+    if (window.Razorpay) {
+      resolve();
+      return;
+    }
+    const script = document.createElement("script");
+    script.src = "https://checkout.razorpay.com/v1/checkout.js";
+    script.onload = () => resolve();
+    document.body.appendChild(script);
+  });
+};
+
+const CourseCard = ({
+  id,
+  title,
+  description,
+  category,
+  image,
+  duration,
+  students,
+  lessons,
   free,
   featured = false,
-  index = 0 
+  index = 0,
 }: CourseCardProps) => {
-  const paymentFormRef = useRef<HTMLFormElement>(null);
-  const [showPayment, setShowPayment] = useState(false);
-  const [isPaymentLoaded, setIsPaymentLoaded] = useState(false);
+  const [isPaymentLoading, setIsPaymentLoading] = useState(false);
 
-  useEffect(() => {
-    if (!free && showPayment && paymentFormRef.current) {
-      const script = document.createElement('script');
-      script.src = 'https://checkout.razorpay.com/v1/payment-button.js';
-      script.setAttribute('data-payment_button_id', 'pl_QLFKugV18DUp8V');
-      script.async = true;
-      
-      script.onload = () => {
-        setIsPaymentLoaded(true);
-      };
-      
-      // Clear the form and append the new script
-      if (paymentFormRef.current.hasChildNodes()) {
-        paymentFormRef.current.innerHTML = '';
+  const handleEnrollNow = async () => {
+    setIsPaymentLoading(true);
+    await loadRazorpayScript();
+    setIsPaymentLoading(false);
+
+    const options = {
+      key: RAZORPAY_KEY_ID,
+      amount: 99900, // Amount in paise (e.g. ₹999). In real usage, make dynamic.
+      currency: "INR",
+      name: title,
+      description: "Course enrollment fee",
+      image: image,
+      handler: function (response: any) {
+        alert("Payment successful! Payment Id: " + response.razorpay_payment_id);
+      },
+      prefill: {
+        name: "", // Optionally, student's name/email
+        email: "",
+      },
+      theme: {
+        color: "#6366f1",
+      },
+      modal: {
+        ondismiss: function () {
+          // console.log("Modal closed");
+        }
       }
-      paymentFormRef.current.appendChild(script);
-    }
-  }, [free, showPayment]);
+    };
+
+    const rzp = new window.Razorpay(options);
+    rzp.open();
+  };
 
   return (
-    <CardCustom 
-      glass 
-      hover 
-      clickable 
+    <CardCustom
+      glass
+      hover
+      clickable
       className={cn(
         "overflow-hidden group",
         featured ? "border-primary/50" : "",
@@ -68,14 +100,12 @@ const CourseCard = ({
         `animate-delay-${Math.min(index * 100, 500)}`
       )}
     >
-      {/* Course image */}
       <div className="relative aspect-[16/9] overflow-hidden">
-        <img 
-          src={image} 
+        <img
+          src={image}
           alt={title}
           className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
         />
-        {/* Category tag */}
         <div className="absolute top-4 left-4 bg-background/80 backdrop-blur-sm text-xs font-medium px-2.5 py-1 rounded-full">
           {category}
         </div>
@@ -90,12 +120,10 @@ const CourseCard = ({
           </div>
         )}
       </div>
-      
       <CardHeader>
         <CardTitle className="line-clamp-1">{title}</CardTitle>
         <CardDescription className="line-clamp-2">{description}</CardDescription>
       </CardHeader>
-      
       <CardContent>
         <div className="grid grid-cols-3 gap-2 text-sm text-muted-foreground">
           <div className="flex items-center gap-1.5">
@@ -112,41 +140,23 @@ const CourseCard = ({
           </div>
         </div>
       </CardContent>
-      
       <CardFooter className="flex flex-col gap-4">
-        {!free && !showPayment ? (
-          <ButtonCustom 
-            fullWidth 
+        {!free ? (
+          <ButtonCustom
+            fullWidth
             variant="primary"
-            onClick={() => setShowPayment(true)}
+            onClick={handleEnrollNow}
+            isLoading={isPaymentLoading}
+            loadingText="Loading…"
             className="bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 text-white shadow-lg hover:shadow-xl transition-all duration-300"
           >
             Enroll Now
           </ButtonCustom>
-        ) : !free && showPayment ? (
-          <>
-            <div className="w-full" style={{ display: isPaymentLoaded ? 'block' : 'none' }}>
-              <form ref={paymentFormRef}>
-                {/* Razorpay script will be injected here */}
-              </form>
-            </div>
-            {!isPaymentLoaded && (
-              <div className="w-full flex justify-center">
-                <div className="animate-spin h-6 w-6 border-2 border-primary border-t-transparent rounded-full"></div>
-              </div>
-            )}
-            <button 
-              onClick={() => setShowPayment(false)}
-              className="text-sm text-muted-foreground hover:text-foreground mt-2"
-            >
-              Cancel
-            </button>
-          </>
         ) : (
           <Link to={`/courses/${id}`} className="w-full">
-            <ButtonCustom 
-              fullWidth 
-              icon={<ArrowRight />} 
+            <ButtonCustom
+              fullWidth
+              icon={<ArrowRight />}
               iconPosition="right"
               variant="primary"
               className="bg-gradient-to-r from-green-400 to-green-500 hover:from-green-500 hover:to-green-600 shadow-lg hover:shadow-xl transition-all duration-300"
@@ -161,7 +171,6 @@ const CourseCard = ({
 };
 
 const CoursePreview = () => {
-  // Sample data - will be fetched from API in real implementation
   const featuredCourses = [
     {
       id: "neet-crash-course",
