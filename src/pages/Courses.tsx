@@ -107,28 +107,9 @@ interface CourseCardProps {
 }
 
 const CourseCard = ({ course, index }: CourseCardProps) => {
-  const paymentFormRef = useRef<HTMLFormElement>(null);
   const [showPayment, setShowPayment] = useState(false);
-  const [isPaymentLoaded, setIsPaymentLoaded] = useState(false);
 
-  useEffect(() => {
-    if (!course.free && showPayment && paymentFormRef.current) {
-      const script = document.createElement('script');
-      script.src = 'https://checkout.razorpay.com/v1/payment-button.js';
-      script.setAttribute('data-payment_button_id', 'pl_QLFKugV18DUp8V');
-      script.async = true;
-      
-      script.onload = () => {
-        setIsPaymentLoaded(true);
-      };
-      
-      // Clear the form and append the new script
-      if (paymentFormRef.current.hasChildNodes()) {
-        paymentFormRef.current.innerHTML = '';
-      }
-      paymentFormRef.current.appendChild(script);
-    }
-  }, [course.free, showPayment]);
+  const handleCancelPayment = () => setShowPayment(false);
 
   return (
     <CardCustom 
@@ -196,24 +177,22 @@ const CourseCard = ({ course, index }: CourseCardProps) => {
             Enroll Now
           </ButtonCustom>
         ) : !course.free && showPayment ? (
-          <>
-            <div className="w-full" style={{ display: isPaymentLoaded ? 'block' : 'none' }}>
-              <form ref={paymentFormRef}>
-                {/* Razorpay script will be injected here */}
-              </form>
-            </div>
-            {!isPaymentLoaded && (
-              <div className="w-full flex justify-center">
-                <div className="animate-spin h-6 w-6 border-2 border-primary border-t-transparent rounded-full"></div>
-              </div>
-            )}
-            <button 
-              onClick={() => setShowPayment(false)}
-              className="text-sm text-muted-foreground hover:text-foreground mt-2"
+          <div className="w-full flex flex-col gap-2 items-center">
+            <form className="w-full flex flex-col items-center">
+              <script
+                src="https://checkout.razorpay.com/v1/payment-button.js"
+                data-payment_button_id="pl_QLFKugV18DUp8V"
+                async
+              ></script>
+            </form>
+            <ButtonCustom
+              size="sm"
+              variant="ghost"
+              onClick={handleCancelPayment}
             >
               Cancel
-            </button>
-          </>
+            </ButtonCustom>
+          </div>
         ) : course.free && (
           <Link to={`/courses/${course.id}`} className="w-full">
             <ButtonCustom 

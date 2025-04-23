@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { CardCustom, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from "@/components/ui/card-custom";
 import { ButtonCustom } from "@/components/ui/button-custom";
@@ -27,10 +26,8 @@ declare global {
   }
 }
 
-// Only publishable key is used
 const RAZORPAY_KEY_ID = "rzp_live_vaLIiJidPPfFlr";
 
-// Set pricing by course id
 const getCoursePrice = (id: string): number => {
   switch (id) {
     case "neet-crash-course":
@@ -72,7 +69,6 @@ const CourseCard = ({
   index = 0,
 }: CourseCardProps) => {
   const [showPayNow, setShowPayNow] = useState(false);
-  const [isPaymentLoading, setIsPaymentLoading] = useState(false);
   const { toast } = useToast();
 
   const price = getCoursePrice(id);
@@ -82,68 +78,8 @@ const CourseCard = ({
     setShowPayNow(true);
   };
 
-  const handlePayNow = async () => {
-    setIsPaymentLoading(true);
-    try {
-      await loadRazorpayScript();
-      setIsPaymentLoading(false);
-
-      const options = {
-        key: RAZORPAY_KEY_ID,
-        amount: price * 100, // in paise
-        currency: "INR",
-        name: title,
-        description: "Course enrollment fee",
-        image: image,
-        handler: function (response: any) {
-          toast({
-            title: "Payment Successful!",
-            description: `Your payment for ${title} is complete. Payment ID: ${response.razorpay_payment_id}`,
-            variant: "default",
-          });
-          
-          console.log("Payment success:", response);
-        },
-        prefill: {
-          name: "", // Optionally, student's name/email
-          email: "",
-        },
-        theme: {
-          color: "#6366f1",
-        },
-        modal: {
-          ondismiss: function () {
-            setShowPayNow(false);
-            toast({
-              title: "Payment Cancelled",
-              description: "You have cancelled the payment process.",
-              variant: "default",
-            });
-          }
-        }
-      };
-
-      const rzp = new window.Razorpay(options);
-      
-      rzp.on('payment.failed', function (response: any) {
-        toast({
-          title: "Payment Failed",
-          description: `Error: ${response.error.description}`,
-          variant: "destructive",
-        });
-        console.error("Payment failed:", response.error);
-      });
-      
-      rzp.open();
-    } catch (error) {
-      setIsPaymentLoading(false);
-      toast({
-        title: "Error",
-        description: "Failed to load payment gateway. Please try again.",
-        variant: "destructive",
-      });
-      console.error("Razorpay error:", error);
-    }
+  const handleCancelPayNow = () => {
+    setShowPayNow(false);
   };
 
   return (
@@ -215,16 +151,24 @@ const CourseCard = ({
               Enroll Now
             </ButtonCustom>
           ) : (
-            <ButtonCustom
-              fullWidth
-              variant="primary"
-              onClick={handlePayNow}
-              isLoading={isPaymentLoading}
-              loadingText="Processing..."
-              className="bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 text-white shadow-lg hover:shadow-xl transition-all duration-300"
-            >
-              Pay Now ₹{price}
-            </ButtonCustom>
+            <>
+              <div className="w-full flex flex-col gap-2 items-center">
+                <form className="w-full flex flex-col items-center">
+                  <script
+                    src="https://checkout.razorpay.com/v1/payment-button.js"
+                    data-payment_button_id="pl_QLFKugV18DUp8V"
+                    async
+                  ></script>
+                </form>
+                <ButtonCustom
+                  size="sm"
+                  variant="ghost"
+                  onClick={handleCancelPayNow}
+                >
+                  Cancel
+                </ButtonCustom>
+              </div>
+            </>
           )
         ) : (
           <Link to={`/courses/${id}`} className="w-full">
@@ -321,5 +265,3 @@ const CoursePreview = () => {
 };
 
 export default CoursePreview;
-
-// NOTE: This file is getting quite long (~250 lines). Consider refactoring it into smaller components for better maintainability.
