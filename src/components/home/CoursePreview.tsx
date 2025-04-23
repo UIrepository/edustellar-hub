@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { CardCustom, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from "@/components/ui/card-custom";
 import { ButtonCustom } from "@/components/ui/button-custom";
@@ -25,7 +26,23 @@ declare global {
   }
 }
 
+// Only publishable key is used
 const RAZORPAY_KEY_ID = "rzp_test_GIseZSACajcrW0";
+
+// Set pricing by course id
+const getCoursePrice = (id: string): number => {
+  switch (id) {
+    case "neet-crash-course":
+      return 1; // 1 rupee
+    case "jee-advanced-math":
+      return 99;
+    case "neet-biology":
+      return 599;
+    // Add more cases if there are more courses with different prices
+    default:
+      return 499;
+  }
+};
 
 const loadRazorpayScript = (): Promise<void> => {
   return new Promise((resolve) => {
@@ -53,16 +70,24 @@ const CourseCard = ({
   featured = false,
   index = 0,
 }: CourseCardProps) => {
+  const [showPayNow, setShowPayNow] = useState(false);
   const [isPaymentLoading, setIsPaymentLoading] = useState(false);
 
-  const handleEnrollNow = async () => {
+  const price = getCoursePrice(id);
+  const isPaid = !free;
+
+  const handleEnrollNow = () => {
+    setShowPayNow(true);
+  };
+
+  const handlePayNow = async () => {
     setIsPaymentLoading(true);
     await loadRazorpayScript();
     setIsPaymentLoading(false);
 
     const options = {
       key: RAZORPAY_KEY_ID,
-      amount: 99900, // Amount in paise (e.g. ₹999). In real usage, make dynamic.
+      amount: price * 100, // in paise
       currency: "INR",
       name: title,
       description: "Course enrollment fee",
@@ -79,7 +104,7 @@ const CourseCard = ({
       },
       modal: {
         ondismiss: function () {
-          // console.log("Modal closed");
+          setShowPayNow(false);
         }
       }
     };
@@ -119,6 +144,11 @@ const CourseCard = ({
             Free
           </div>
         )}
+        {isPaid && (
+          <div className="absolute bottom-4 right-4 bg-white/80 text-xs font-medium px-2 py-1 rounded-full shadow">
+            ₹{price}
+          </div>
+        )}
       </div>
       <CardHeader>
         <CardTitle className="line-clamp-1">{title}</CardTitle>
@@ -141,17 +171,28 @@ const CourseCard = ({
         </div>
       </CardContent>
       <CardFooter className="flex flex-col gap-4">
-        {!free ? (
-          <ButtonCustom
-            fullWidth
-            variant="primary"
-            onClick={handleEnrollNow}
-            isLoading={isPaymentLoading}
-            loadingText="Loading…"
-            className="bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 text-white shadow-lg hover:shadow-xl transition-all duration-300"
-          >
-            Enroll Now
-          </ButtonCustom>
+        {isPaid ? (
+          !showPayNow ? (
+            <ButtonCustom
+              fullWidth
+              variant="primary"
+              onClick={handleEnrollNow}
+              className="bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 text-white shadow-lg hover:shadow-xl transition-all duration-300"
+            >
+              Enroll Now
+            </ButtonCustom>
+          ) : (
+            <ButtonCustom
+              fullWidth
+              variant="primary"
+              onClick={handlePayNow}
+              isLoading={isPaymentLoading}
+              loadingText="Processing..."
+              className="bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 text-white shadow-lg hover:shadow-xl transition-all duration-300"
+            >
+              Pay Now ₹{price}
+            </ButtonCustom>
+          )
         ) : (
           <Link to={`/courses/${id}`} className="w-full">
             <ButtonCustom
@@ -247,3 +288,5 @@ const CoursePreview = () => {
 };
 
 export default CoursePreview;
+
+// NOTE: This file is getting quite long (~250 lines). Consider refactoring it into smaller components for better maintainability.
