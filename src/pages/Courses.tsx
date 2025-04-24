@@ -6,6 +6,8 @@ import { ButtonCustom } from "@/components/ui/button-custom";
 import { Clock, Users, BookOpen, Search, X, ArrowRight, Filter } from "lucide-react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
+import { useToast } from "@/components/ui/use-toast";
+import { initializeQRPayment } from "@/utils/payment";
 
 const coursesData = [
   // Sample course data - to be replaced with API calls in final implementation
@@ -107,16 +109,29 @@ interface CourseCardProps {
 }
 
 const CourseCard = ({ course, index }: CourseCardProps) => {
-  const [showPayment, setShowPayment] = useState(false);
+  const { toast } = useToast();
 
-  const handleCancelPayment = () => setShowPayment(false);
+  const handlePayment = async () => {
+    try {
+      await initializeQRPayment({
+        amount: getCoursePrice(course.id),
+        description: `Payment for ${course.title}`,
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Could not initialize payment. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
 
   return (
-    <CardCustom 
+    <CardCustom
       key={course.id}
-      glass 
-      hover 
-      clickable 
+      glass
+      hover
+      clickable
       className={cn(
         "overflow-hidden group",
         course.featured ? "border-primary/50" : "",
@@ -167,37 +182,20 @@ const CourseCard = ({ course, index }: CourseCardProps) => {
       </CardContent>
       
       <CardFooter className="flex flex-col gap-4">
-        {!course.free && !showPayment ? (
-          <ButtonCustom 
-            fullWidth 
+        {!course.free ? (
+          <ButtonCustom
+            fullWidth
             variant="primary"
-            onClick={() => setShowPayment(true)}
+            onClick={handlePayment}
             className="bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 text-white shadow-lg hover:shadow-xl transition-all duration-300"
           >
-            Enroll Now
+            Pay with QR Code
           </ButtonCustom>
-        ) : !course.free && showPayment ? (
-          <div className="w-full flex flex-col gap-2 items-center">
-            <form className="w-full flex flex-col items-center">
-              <script
-                src="https://checkout.razorpay.com/v1/payment-button.js"
-                data-payment_button_id="pl_QLFKugV18DUp8V"
-                async
-              ></script>
-            </form>
-            <ButtonCustom
-              size="sm"
-              variant="ghost"
-              onClick={handleCancelPayment}
-            >
-              Cancel
-            </ButtonCustom>
-          </div>
-        ) : course.free && (
+        ) : (
           <Link to={`/courses/${course.id}`} className="w-full">
-            <ButtonCustom 
-              fullWidth 
-              icon={<ArrowRight />} 
+            <ButtonCustom
+              fullWidth
+              icon={<ArrowRight />}
               iconPosition="right"
               variant="primary"
               className="bg-gradient-to-r from-green-400 to-green-500 hover:from-green-500 hover:to-green-600 shadow-lg hover:shadow-xl transition-all duration-300"

@@ -68,18 +68,23 @@ const CourseCard = ({
   featured = false,
   index = 0,
 }: CourseCardProps) => {
-  const [showPayNow, setShowPayNow] = useState(false);
   const { toast } = useToast();
-
   const price = getCoursePrice(id);
   const isPaid = !free;
 
-  const handleEnrollNow = () => {
-    setShowPayNow(true);
-  };
-
-  const handleCancelPayNow = () => {
-    setShowPayNow(false);
+  const handlePayment = async () => {
+    try {
+      await initializeQRPayment({
+        amount: price,
+        description: `Payment for ${title}`,
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Could not initialize payment. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
@@ -141,35 +146,14 @@ const CourseCard = ({
       </CardContent>
       <CardFooter className="flex flex-col gap-4">
         {isPaid ? (
-          !showPayNow ? (
-            <ButtonCustom
-              fullWidth
-              variant="primary"
-              onClick={handleEnrollNow}
-              className="bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 text-white shadow-lg hover:shadow-xl transition-all duration-300"
-            >
-              Enroll Now
-            </ButtonCustom>
-          ) : (
-            <>
-              <div className="w-full flex flex-col gap-2 items-center">
-                <form className="w-full flex flex-col items-center">
-                  <script
-                    src="https://checkout.razorpay.com/v1/payment-button.js"
-                    data-payment_button_id="pl_QLFKugV18DUp8V"
-                    async
-                  ></script>
-                </form>
-                <ButtonCustom
-                  size="sm"
-                  variant="ghost"
-                  onClick={handleCancelPayNow}
-                >
-                  Cancel
-                </ButtonCustom>
-              </div>
-            </>
-          )
+          <ButtonCustom
+            fullWidth
+            variant="primary"
+            onClick={handlePayment}
+            className="bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 text-white shadow-lg hover:shadow-xl transition-all duration-300"
+          >
+            Pay with QR Code
+          </ButtonCustom>
         ) : (
           <Link to={`/courses/${id}`} className="w-full">
             <ButtonCustom
