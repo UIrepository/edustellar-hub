@@ -30,7 +30,7 @@ export const initializeQRPayment = async ({ amount, currency = "INR", descriptio
     amount: amount * 100, // Razorpay accepts amount in paise
     currency,
     description,
-    name: "Annatya Overseas",
+    name: "Unknown IITians",
     prefill: {
       name: "",
       email: "",
@@ -44,7 +44,7 @@ export const initializeQRPayment = async ({ amount, currency = "INR", descriptio
         console.log("Payment modal closed");
       }
     },
-    // Restrict payment methods
+    // Restrict payment methods to QR code only
     config: {
       display: {
         blocks: {
@@ -53,7 +53,10 @@ export const initializeQRPayment = async ({ amount, currency = "INR", descriptio
             instruments: [
               {
                 method: "upi",
-                flow: "qr"
+                flow: "qr",
+                features: {
+                  intent: false // Disable UPI ID input
+                }
               }
             ]
           },
@@ -83,3 +86,4 @@ export const initializeQRPayment = async ({ amount, currency = "INR", descriptio
     throw error;
   }
 };
+
