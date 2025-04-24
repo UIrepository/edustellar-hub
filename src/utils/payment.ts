@@ -44,7 +44,7 @@ export const initializeQRPayment = async ({ amount, currency = "INR", descriptio
         console.log("Payment modal closed");
       }
     },
-    // Restrict payment methods to QR code only
+    // Completely restrict payment methods to QR code only
     config: {
       display: {
         blocks: {
@@ -55,12 +55,14 @@ export const initializeQRPayment = async ({ amount, currency = "INR", descriptio
                 method: "upi",
                 flow: "qr",
                 features: {
-                  intent: false // Disable UPI ID input
+                  intent: false, // Disable UPI ID input
+                  upi_intent: false, // Disable UPI intent
+                  upi_collect: false // Disable UPI collect
                 }
               }
             ]
           },
-          other: { //hide other payment blocks
+          other: { // Hide other payment blocks completely
             name: "Other Payment Methods",
             instruments: []
           }
@@ -86,4 +88,3 @@ export const initializeQRPayment = async ({ amount, currency = "INR", descriptio
     throw error;
   }
 };
-
