@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { CardCustom, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card-custom";
@@ -234,6 +234,21 @@ const Courses = () => {
   };
   
   const hasActiveFilters = searchTerm || categoryFilter || showFreeOnly;
+
+  useEffect(() => {
+    const loadRazorpayScript = () => {
+      if (document.getElementById("razorpay-checkout-js")) return;
+      
+      const script = document.createElement("script");
+      script.id = "razorpay-checkout-js";
+      script.src = "https://checkout.razorpay.com/v1/checkout.js";
+      script.async = true;
+      script.defer = true;
+      document.body.appendChild(script);
+    };
+    
+    loadRazorpayScript();
+  }, []);
 
   return (
     <div className="min-h-screen flex flex-col">

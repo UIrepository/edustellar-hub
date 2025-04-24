@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { CardCustom, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from "@/components/ui/card-custom";
 import { ButtonCustom } from "@/components/ui/button-custom";
 import { Clock, Users, BookOpen, ArrowRight } from "lucide-react";
@@ -135,6 +135,21 @@ const CourseCard = ({ id, title, description, category, image, duration, student
 };
 
 const CoursePreview = () => {
+  useEffect(() => {
+    const loadRazorpayScript = () => {
+      if (document.getElementById("razorpay-checkout-js")) return;
+      
+      const script = document.createElement("script");
+      script.id = "razorpay-checkout-js";
+      script.src = "https://checkout.razorpay.com/v1/checkout.js";
+      script.async = true;
+      script.defer = true;
+      document.body.appendChild(script);
+    };
+    
+    loadRazorpayScript();
+  }, []);
+
   const featuredCourses = [
     {
       id: "neet-crash-course",

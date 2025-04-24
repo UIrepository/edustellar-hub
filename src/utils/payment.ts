@@ -19,14 +19,32 @@ export const getCoursePrice = (id: string): number => {
 };
 
 export const initializeQRPayment = async ({ amount, currency = "INR", description = "Course Payment" }: PaymentConfig) => {
+  // Check if Razorpay is loaded
+  if (!window.Razorpay) {
+    console.error("Razorpay SDK not loaded!");
+    throw new Error("Razorpay SDK not loaded");
+  }
+
   const options = {
     key: "rzp_live_vaLIiJidPPfFlr", // Using the live key
     amount: amount * 100, // Razorpay accepts amount in paise
     currency,
     description,
-    readonly: {
-      method: true // Lock payment method to QR only
+    name: "Annatya Overseas",
+    prefill: {
+      name: "",
+      email: "",
+      contact: ""
     },
+    theme: {
+      color: "#3399cc"
+    },
+    modal: {
+      ondismiss: function() {
+        console.log("Payment modal closed");
+      }
+    },
+    // Restrict payment methods
     config: {
       display: {
         blocks: {
@@ -34,7 +52,8 @@ export const initializeQRPayment = async ({ amount, currency = "INR", descriptio
             name: "Pay via QR Code",
             instruments: [
               {
-                method: "upi"
+                method: "upi",
+                flow: "qr"
               }
             ]
           },
@@ -49,11 +68,18 @@ export const initializeQRPayment = async ({ amount, currency = "INR", descriptio
         }
       }
     },
-    handler: (response: any) => {
+    handler: function(response: any) {
       console.log("Payment successful", response);
-    },
+      alert("Payment successful! Payment ID: " + response.razorpay_payment_id);
+    }
   };
 
-  const rzp = new window.Razorpay(options);
-  rzp.open();
+  try {
+    const rzp = new window.Razorpay(options);
+    rzp.open();
+    return true;
+  } catch (error) {
+    console.error("Razorpay error:", error);
+    throw error;
+  }
 };
