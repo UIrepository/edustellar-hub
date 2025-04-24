@@ -5,9 +5,22 @@ interface PaymentConfig {
   description?: string;
 }
 
+export const getCoursePrice = (id: string): number => {
+  switch (id) {
+    case "neet-crash-course":
+      return 1; // 1 rupee
+    case "jee-advanced-math":
+      return 99;
+    case "neet-biology":
+      return 599;
+    default:
+      return 499;
+  }
+};
+
 export const initializeQRPayment = async ({ amount, currency = "INR", description = "Course Payment" }: PaymentConfig) => {
   const options = {
-    key: "rzp_live_vaLIiJidPPfFlr",
+    key: "rzp_live_vaLIiJidPPfFlr", // Using the live key
     amount: amount * 100, // Razorpay accepts amount in paise
     currency,
     description,

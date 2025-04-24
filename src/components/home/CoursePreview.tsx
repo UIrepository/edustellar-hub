@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
 import { CardCustom, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from "@/components/ui/card-custom";
 import { ButtonCustom } from "@/components/ui/button-custom";
 import { Clock, Users, BookOpen, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
+import { initializeQRPayment, getCoursePrice } from "@/utils/payment";
 
 interface CourseCardProps {
   id: string;
@@ -28,46 +29,7 @@ declare global {
 
 const RAZORPAY_KEY_ID = "rzp_live_vaLIiJidPPfFlr";
 
-const getCoursePrice = (id: string): number => {
-  switch (id) {
-    case "neet-crash-course":
-      return 1; // 1 rupee
-    case "jee-advanced-math":
-      return 99;
-    case "neet-biology":
-      return 599;
-    // Add more cases if there are more courses with different prices
-    default:
-      return 499;
-  }
-};
-
-const loadRazorpayScript = (): Promise<void> => {
-  return new Promise((resolve) => {
-    if (window.Razorpay) {
-      resolve();
-      return;
-    }
-    const script = document.createElement("script");
-    script.src = "https://checkout.razorpay.com/v1/checkout.js";
-    script.onload = () => resolve();
-    document.body.appendChild(script);
-  });
-};
-
-const CourseCard = ({
-  id,
-  title,
-  description,
-  category,
-  image,
-  duration,
-  students,
-  lessons,
-  free,
-  featured = false,
-  index = 0,
-}: CourseCardProps) => {
+const CourseCard = ({ id, title, description, category, image, duration, students, lessons, free, featured = false, index = 0 }: CourseCardProps) => {
   const { toast } = useToast();
   const price = getCoursePrice(id);
   const isPaid = !free;

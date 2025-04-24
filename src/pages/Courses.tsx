@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState } from "react";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { CardCustom, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card-custom";
@@ -6,8 +6,8 @@ import { ButtonCustom } from "@/components/ui/button-custom";
 import { Clock, Users, BookOpen, Search, X, ArrowRight, Filter } from "lucide-react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { useToast } from "@/components/ui/use-toast";
-import { initializeQRPayment } from "@/utils/payment";
+import { useToast } from "@/hooks/use-toast";
+import { initializeQRPayment, getCoursePrice } from "@/utils/payment";
 
 const coursesData = [
   // Sample course data - to be replaced with API calls in final implementation
