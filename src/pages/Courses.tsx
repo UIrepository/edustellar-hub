@@ -7,6 +7,25 @@ import { Clock, Users, BookOpen, Search, X, ArrowRight, Filter } from "lucide-re
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 
+declare global {
+  interface Window {
+    Razorpay: any;
+  }
+}
+
+const loadRazorpayScript = (): Promise<void> => {
+  return new Promise((resolve) => {
+    if (window.Razorpay) {
+      resolve();
+      return;
+    }
+    const script = document.createElement("script");
+    script.src = "https://checkout.razorpay.com/v1/checkout.js";
+    script.onload = () => resolve();
+    document.body.appendChild(script);
+  });
+};
+
 const coursesData = [
   {
     id: "neet-crash-course",
@@ -149,19 +168,20 @@ const CourseCard = ({ course, index }: CourseCardProps) => {
       name: course.title,
       description: "Course enrollment fee",
       image: course.image,
-      handler: function (response) {
-        alert(response.razorpay_payment_id);
+      handler: function (response: any) {
+        alert("Payment successful! Payment Id: " + response.razorpay_payment_id);
       },
       prefill: {
-        name: "John Doe",
-        email: "john.doe@example.com",
-        contact: "9876543210"
-      },
-      notes: {
-        address: "Razorpay Corporate Office"
+        name: "",
+        email: "",
       },
       theme: {
-        color: "#3399cc"
+        color: "#6366f1",
+      },
+      modal: {
+        ondismiss: function () {
+          // console.log("Modal closed");
+        }
       }
     };
 
