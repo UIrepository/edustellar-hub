@@ -1,11 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useState } from "react";
 import { CardCustom, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from "@/components/ui/card-custom";
 import { ButtonCustom } from "@/components/ui/button-custom";
 import { Clock, Users, BookOpen, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { useToast } from "@/hooks/use-toast";
-import { initializeQRPayment, getCoursePrice } from "@/utils/payment";
 
 interface CourseCardProps {
   id: string;
@@ -27,26 +25,67 @@ declare global {
   }
 }
 
-const RAZORPAY_KEY_ID = "rzp_live_vaLIiJidPPfFlr";
+const RAZORPAY_KEY_ID = "rzp_test_GIseZSACajcrW0";
 
-const CourseCard = ({ id, title, description, category, image, duration, students, lessons, free, featured = false, index = 0 }: CourseCardProps) => {
-  const { toast } = useToast();
-  const price = getCoursePrice(id);
-  const isPaid = !free;
-
-  const handlePayment = async () => {
-    try {
-      await initializeQRPayment({
-        amount: price,
-        description: `Payment for ${title}`,
-      });
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Could not initialize payment. Please try again.",
-        variant: "destructive",
-      });
+const loadRazorpayScript = (): Promise<void> => {
+  return new Promise((resolve) => {
+    if (window.Razorpay) {
+      resolve();
+      return;
     }
+    const script = document.createElement("script");
+    script.src = "https://checkout.razorpay.com/v1/checkout.js";
+    script.onload = () => resolve();
+    document.body.appendChild(script);
+  });
+};
+
+const CourseCard = ({
+  id,
+  title,
+  description,
+  category,
+  image,
+  duration,
+  students,
+  lessons,
+  free,
+  featured = false,
+  index = 0,
+}: CourseCardProps) => {
+  const [isPaymentLoading, setIsPaymentLoading] = useState(false);
+
+  const handleEnrollNow = async () => {
+    setIsPaymentLoading(true);
+    await loadRazorpayScript();
+    setIsPaymentLoading(false);
+
+    const options = {
+      key: RAZORPAY_KEY_ID,
+      amount: 99900, // Amount in paise (e.g. ₹999). In real usage, make dynamic.
+      currency: "INR",
+      name: title,
+      description: "Course enrollment fee",
+      image: image,
+      handler: function (response: any) {
+        alert("Payment successful! Payment Id: " + response.razorpay_payment_id);
+      },
+      prefill: {
+        name: "", // Optionally, student's name/email
+        email: "",
+      },
+      theme: {
+        color: "#6366f1",
+      },
+      modal: {
+        ondismiss: function () {
+          // console.log("Modal closed");
+        }
+      }
+    };
+
+    const rzp = new window.Razorpay(options);
+    rzp.open();
   };
 
   return (
@@ -80,11 +119,6 @@ const CourseCard = ({ id, title, description, category, image, duration, student
             Free
           </div>
         )}
-        {isPaid && (
-          <div className="absolute bottom-4 right-4 bg-white/80 text-xs font-medium px-2 py-1 rounded-full shadow">
-            ₹{price}
-          </div>
-        )}
       </div>
       <CardHeader>
         <CardTitle className="line-clamp-1">{title}</CardTitle>
@@ -107,14 +141,16 @@ const CourseCard = ({ id, title, description, category, image, duration, student
         </div>
       </CardContent>
       <CardFooter className="flex flex-col gap-4">
-        {isPaid ? (
+        {!free ? (
           <ButtonCustom
             fullWidth
             variant="primary"
-            onClick={handlePayment}
+            onClick={handleEnrollNow}
+            isLoading={isPaymentLoading}
+            loadingText="Loading…"
             className="bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 text-white shadow-lg hover:shadow-xl transition-all duration-300"
           >
-            Pay with QR Code
+            Enroll Now
           </ButtonCustom>
         ) : (
           <Link to={`/courses/${id}`} className="w-full">
@@ -135,21 +171,6 @@ const CourseCard = ({ id, title, description, category, image, duration, student
 };
 
 const CoursePreview = () => {
-  useEffect(() => {
-    const loadRazorpayScript = () => {
-      if (document.getElementById("razorpay-checkout-js")) return;
-      
-      const script = document.createElement("script");
-      script.id = "razorpay-checkout-js";
-      script.src = "https://checkout.razorpay.com/v1/checkout.js";
-      script.async = true;
-      script.defer = true;
-      document.body.appendChild(script);
-    };
-    
-    loadRazorpayScript();
-  }, []);
-
   const featuredCourses = [
     {
       id: "neet-crash-course",

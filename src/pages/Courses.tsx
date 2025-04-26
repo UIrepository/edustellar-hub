@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { CardCustom, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card-custom";
@@ -6,8 +6,6 @@ import { ButtonCustom } from "@/components/ui/button-custom";
 import { Clock, Users, BookOpen, Search, X, ArrowRight, Filter } from "lucide-react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { useToast } from "@/hooks/use-toast";
-import { initializeQRPayment, getCoursePrice } from "@/utils/payment";
 
 const coursesData = [
   // Sample course data - to be replaced with API calls in final implementation
@@ -109,29 +107,35 @@ interface CourseCardProps {
 }
 
 const CourseCard = ({ course, index }: CourseCardProps) => {
-  const { toast } = useToast();
+  const paymentFormRef = useRef<HTMLFormElement>(null);
+  const [showPayment, setShowPayment] = useState(false);
+  const [isPaymentLoaded, setIsPaymentLoaded] = useState(false);
 
-  const handlePayment = async () => {
-    try {
-      await initializeQRPayment({
-        amount: getCoursePrice(course.id),
-        description: `Payment for ${course.title}`,
-      });
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Could not initialize payment. Please try again.",
-        variant: "destructive",
-      });
+  useEffect(() => {
+    if (!course.free && showPayment && paymentFormRef.current) {
+      const script = document.createElement('script');
+      script.src = 'https://checkout.razorpay.com/v1/payment-button.js';
+      script.setAttribute('data-payment_button_id', 'pl_QLFKugV18DUp8V');
+      script.async = true;
+      
+      script.onload = () => {
+        setIsPaymentLoaded(true);
+      };
+      
+      // Clear the form and append the new script
+      if (paymentFormRef.current.hasChildNodes()) {
+        paymentFormRef.current.innerHTML = '';
+      }
+      paymentFormRef.current.appendChild(script);
     }
-  };
+  }, [course.free, showPayment]);
 
   return (
-    <CardCustom
+    <CardCustom 
       key={course.id}
-      glass
-      hover
-      clickable
+      glass 
+      hover 
+      clickable 
       className={cn(
         "overflow-hidden group",
         course.featured ? "border-primary/50" : "",
@@ -182,20 +186,39 @@ const CourseCard = ({ course, index }: CourseCardProps) => {
       </CardContent>
       
       <CardFooter className="flex flex-col gap-4">
-        {!course.free ? (
-          <ButtonCustom
-            fullWidth
+        {!course.free && !showPayment ? (
+          <ButtonCustom 
+            fullWidth 
             variant="primary"
-            onClick={handlePayment}
+            onClick={() => setShowPayment(true)}
             className="bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 text-white shadow-lg hover:shadow-xl transition-all duration-300"
           >
-            Pay with QR Code
+            Enroll Now
           </ButtonCustom>
-        ) : (
+        ) : !course.free && showPayment ? (
+          <>
+            <div className="w-full" style={{ display: isPaymentLoaded ? 'block' : 'none' }}>
+              <form ref={paymentFormRef}>
+                {/* Razorpay script will be injected here */}
+              </form>
+            </div>
+            {!isPaymentLoaded && (
+              <div className="w-full flex justify-center">
+                <div className="animate-spin h-6 w-6 border-2 border-primary border-t-transparent rounded-full"></div>
+              </div>
+            )}
+            <button 
+              onClick={() => setShowPayment(false)}
+              className="text-sm text-muted-foreground hover:text-foreground mt-2"
+            >
+              Cancel
+            </button>
+          </>
+        ) : course.free && (
           <Link to={`/courses/${course.id}`} className="w-full">
-            <ButtonCustom
-              fullWidth
-              icon={<ArrowRight />}
+            <ButtonCustom 
+              fullWidth 
+              icon={<ArrowRight />} 
               iconPosition="right"
               variant="primary"
               className="bg-gradient-to-r from-green-400 to-green-500 hover:from-green-500 hover:to-green-600 shadow-lg hover:shadow-xl transition-all duration-300"
@@ -234,21 +257,6 @@ const Courses = () => {
   };
   
   const hasActiveFilters = searchTerm || categoryFilter || showFreeOnly;
-
-  useEffect(() => {
-    const loadRazorpayScript = () => {
-      if (document.getElementById("razorpay-checkout-js")) return;
-      
-      const script = document.createElement("script");
-      script.id = "razorpay-checkout-js";
-      script.src = "https://checkout.razorpay.com/v1/checkout.js";
-      script.async = true;
-      script.defer = true;
-      document.body.appendChild(script);
-    };
-    
-    loadRazorpayScript();
-  }, []);
 
   return (
     <div className="min-h-screen flex flex-col">
