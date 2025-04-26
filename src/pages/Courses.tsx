@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from "react";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
@@ -175,7 +176,7 @@ const CourseCard = ({ course, index }: CourseCardProps) => {
           toast({
             title: "Payment Successful",
             description: `Payment ID: ${response.razorpay_payment_id}`,
-            variant: "success"
+            variant: "default" // Changed from 'success' to 'default'
           });
         },
         prefill: {

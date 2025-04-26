@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { CardCustom, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from "@/components/ui/card-custom";
 import { ButtonCustom } from "@/components/ui/button-custom";
@@ -75,7 +76,7 @@ const CourseCard = ({
           toast({
             title: "Payment Successful",
             description: `Payment ID: ${response.razorpay_payment_id}`,
-            variant: "success"
+            variant: "default" // Changed from 'success' to 'default'
           });
         },
         prefill: {
