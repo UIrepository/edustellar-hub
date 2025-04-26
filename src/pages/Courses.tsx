@@ -8,7 +8,6 @@ import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 
 const coursesData = [
-  // Sample course data - to be replaced with API calls in final implementation
   {
     id: "neet-crash-course",
     title: "NEET Crash Course 2023",
@@ -18,6 +17,7 @@ const coursesData = [
     duration: "12 weeks",
     students: 5240,
     lessons: 48,
+    price: 1,
     free: false,
     featured: true
   },
@@ -30,6 +30,7 @@ const coursesData = [
     duration: "16 weeks",
     students: 3890,
     lessons: 64,
+    price: 1,
     free: false
   },
   {
@@ -41,6 +42,7 @@ const coursesData = [
     duration: "4 weeks",
     students: 7650,
     lessons: 16,
+    price: 1,
     free: true
   },
   {
@@ -52,6 +54,7 @@ const coursesData = [
     duration: "10 weeks",
     students: 4120,
     lessons: 40,
+    price: 1,
     free: false
   },
   {
@@ -63,6 +66,7 @@ const coursesData = [
     duration: "14 weeks",
     students: 3250,
     lessons: 56,
+    price: 1,
     free: false
   },
   {
@@ -74,6 +78,7 @@ const coursesData = [
     duration: "8 weeks",
     students: 2980,
     lessons: 32,
+    price: 1,
     free: false
   },
   {
@@ -85,6 +90,7 @@ const coursesData = [
     duration: "12 weeks",
     students: 4560,
     lessons: 48,
+    price: 1,
     free: false,
     featured: true
   },
@@ -97,6 +103,7 @@ const coursesData = [
     duration: "10 weeks",
     students: 3780,
     lessons: 40,
+    price: 1,
     free: true
   },
 ];
@@ -110,6 +117,7 @@ const CourseCard = ({ course, index }: CourseCardProps) => {
   const paymentFormRef = useRef<HTMLFormElement>(null);
   const [showPayment, setShowPayment] = useState(false);
   const [isPaymentLoaded, setIsPaymentLoaded] = useState(false);
+  const [isPaymentLoading, setIsPaymentLoading] = useState(false);
 
   useEffect(() => {
     if (!course.free && showPayment && paymentFormRef.current) {
@@ -122,13 +130,44 @@ const CourseCard = ({ course, index }: CourseCardProps) => {
         setIsPaymentLoaded(true);
       };
       
-      // Clear the form and append the new script
       if (paymentFormRef.current.hasChildNodes()) {
         paymentFormRef.current.innerHTML = '';
       }
       paymentFormRef.current.appendChild(script);
     }
   }, [course.free, showPayment]);
+
+  const handleEnrollNow = async () => {
+    setIsPaymentLoading(true);
+    await loadRazorpayScript();
+    setIsPaymentLoaded(false);
+
+    const options = {
+      key: "rzp_live_vaLIiJidPPfFlr",
+      amount: 100,
+      currency: "INR",
+      name: course.title,
+      description: "Course enrollment fee",
+      image: course.image,
+      handler: function (response) {
+        alert(response.razorpay_payment_id);
+      },
+      prefill: {
+        name: "John Doe",
+        email: "john.doe@example.com",
+        contact: "9876543210"
+      },
+      notes: {
+        address: "Razorpay Corporate Office"
+      },
+      theme: {
+        color: "#3399cc"
+      }
+    };
+
+    const rzp = new window.Razorpay(options);
+    rzp.open();
+  };
 
   return (
     <CardCustom 

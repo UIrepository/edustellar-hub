@@ -17,6 +17,7 @@ interface CourseCardProps {
   free: boolean;
   featured?: boolean;
   index?: number;
+  price?: number;
 }
 
 declare global {
@@ -52,6 +53,7 @@ const CourseCard = ({
   free,
   featured = false,
   index = 0,
+  price,
 }: CourseCardProps) => {
   const [isPaymentLoading, setIsPaymentLoading] = useState(false);
 
@@ -62,7 +64,7 @@ const CourseCard = ({
 
     const options = {
       key: RAZORPAY_KEY_ID,
-      amount: 99900, // Amount in paise (e.g. ₹999). In real usage, make dynamic.
+      amount: price || 100, // Changed from 99900 to 100 (Rs. 1 in paise)
       currency: "INR",
       name: title,
       description: "Course enrollment fee",
@@ -181,6 +183,7 @@ const CoursePreview = () => {
       duration: "12 weeks",
       students: 5240,
       lessons: 48,
+      price: 1,
       free: false,
       featured: true
     },
@@ -193,6 +196,7 @@ const CoursePreview = () => {
       duration: "16 weeks",
       students: 3890,
       lessons: 64,
+      price: 1,
       free: false
     },
     {
@@ -204,6 +208,7 @@ const CoursePreview = () => {
       duration: "4 weeks",
       students: 7650,
       lessons: 16,
+      price: 1,
       free: true
     },
     {
@@ -215,7 +220,21 @@ const CoursePreview = () => {
       duration: "10 weeks",
       students: 4120,
       lessons: 40,
+      price: 1,
       free: false
+    },
+    {
+      id: "neet-chemistry",
+      title: "NEET Chemistry Complete Guide",
+      description: "Comprehensive coverage of organic, inorganic, and physical chemistry for NEET.",
+      category: "NEET",
+      image: "https://images.unsplash.com/photo-1603126857599-f6e157fa2fe6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2000&q=80",
+      duration: "12 weeks",
+      students: 4560,
+      lessons: 48,
+      price: 1,
+      free: false,
+      featured: true
     },
   ];
 

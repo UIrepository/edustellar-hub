@@ -9,7 +9,7 @@ export interface Course {
   duration: string;
   students: number;
   lessons: number;
-  price: number;
+  price: number; // This was already defined, we'll just ensure it's used
   featured?: boolean;
   free: boolean;
 }
