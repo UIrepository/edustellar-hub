@@ -6,6 +6,7 @@ import { ButtonCustom } from "@/components/ui/button-custom";
 import { Clock, Users, BookOpen, Search, X, ArrowRight, Filter } from "lucide-react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
+import { useToast } from "@/hooks/use-toast";
 
 declare global {
   interface Window {
@@ -133,10 +134,12 @@ interface CourseCardProps {
 }
 
 const CourseCard = ({ course, index }: CourseCardProps) => {
+  const { toast } = useToast();
   const paymentFormRef = useRef<HTMLFormElement>(null);
   const [showPayment, setShowPayment] = useState(false);
   const [isPaymentLoaded, setIsPaymentLoaded] = useState(false);
   const [isPaymentLoading, setIsPaymentLoading] = useState(false);
+  const [paymentButtonId] = useState(`payment-button-${course.id}-${Date.now()}`);
 
   useEffect(() => {
     if (!course.free && showPayment && paymentFormRef.current) {
@@ -154,39 +157,61 @@ const CourseCard = ({ course, index }: CourseCardProps) => {
       }
       paymentFormRef.current.appendChild(script);
     }
-  }, [course.free, showPayment]);
+  }, [course.free, showPayment, paymentButtonId]);
 
   const handleEnrollNow = async () => {
-    setIsPaymentLoading(true);
-    await loadRazorpayScript();
-    setIsPaymentLoaded(false);
-
-    const options = {
-      key: "rzp_live_vaLIiJidPPfFlr",
-      amount: 100,
-      currency: "INR",
-      name: course.title,
-      description: "Course enrollment fee",
-      image: course.image,
-      handler: function (response: any) {
-        alert("Payment successful! Payment Id: " + response.razorpay_payment_id);
-      },
-      prefill: {
-        name: "",
-        email: "",
-      },
-      theme: {
-        color: "#6366f1",
-      },
-      modal: {
-        ondismiss: function () {
-          // console.log("Modal closed");
+    try {
+      setIsPaymentLoading(true);
+      await loadRazorpayScript();
+      
+      const options = {
+        key: "rzp_live_vaLIiJidPPfFlr",
+        amount: 100,
+        currency: "INR",
+        name: course.title,
+        description: "Course enrollment fee",
+        image: course.image,
+        handler: function (response: any) {
+          toast({
+            title: "Payment Successful",
+            description: `Payment ID: ${response.razorpay_payment_id}`,
+            variant: "success"
+          });
+        },
+        prefill: {
+          name: "",
+          email: "",
+        },
+        theme: {
+          color: "#6366f1",
+        },
+        modal: {
+          ondismiss: function () {
+            setIsPaymentLoading(false);
+          }
         }
-      }
-    };
+      };
 
-    const rzp = new window.Razorpay(options);
-    rzp.open();
+      const rzp = new window.Razorpay(options);
+      rzp.on('payment.failed', function (response: any) {
+        toast({
+          title: "Payment Failed",
+          description: response.error.description || "Something went wrong",
+          variant: "destructive"
+        });
+        setIsPaymentLoading(false);
+      });
+      
+      rzp.open();
+    } catch (error) {
+      console.error("Payment initialization error:", error);
+      toast({
+        title: "Error",
+        description: "Failed to initialize payment",
+        variant: "destructive"
+      });
+      setIsPaymentLoading(false);
+    }
   };
 
   return (
@@ -257,7 +282,7 @@ const CourseCard = ({ course, index }: CourseCardProps) => {
         ) : !course.free && showPayment ? (
           <>
             <div className="w-full" style={{ display: isPaymentLoaded ? 'block' : 'none' }}>
-              <form ref={paymentFormRef}>
+              <form ref={paymentFormRef} id={paymentButtonId}>
                 {/* Razorpay script will be injected here */}
               </form>
             </div>
@@ -266,12 +291,24 @@ const CourseCard = ({ course, index }: CourseCardProps) => {
                 <div className="animate-spin h-6 w-6 border-2 border-primary border-t-transparent rounded-full"></div>
               </div>
             )}
-            <button 
-              onClick={() => setShowPayment(false)}
-              className="text-sm text-muted-foreground hover:text-foreground mt-2"
-            >
-              Cancel
-            </button>
+            <div className="flex gap-2 justify-center w-full mt-2">
+              <ButtonCustom 
+                onClick={() => setShowPayment(false)}
+                variant="outline"
+                size="sm"
+              >
+                Cancel
+              </ButtonCustom>
+              <ButtonCustom 
+                onClick={handleEnrollNow}
+                variant="primary"
+                size="sm"
+                isLoading={isPaymentLoading}
+                loadingText="Loading…"
+              >
+                Direct Payment
+              </ButtonCustom>
+            </div>
           </>
         ) : course.free && (
           <Link to={`/courses/${course.id}`} className="w-full">

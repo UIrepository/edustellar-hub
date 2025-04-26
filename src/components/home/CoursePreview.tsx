@@ -4,6 +4,7 @@ import { ButtonCustom } from "@/components/ui/button-custom";
 import { Clock, Users, BookOpen, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
+import { useToast } from "@/hooks/use-toast";
 
 interface CourseCardProps {
   id: string;
@@ -55,39 +56,62 @@ const CourseCard = ({
   index = 0,
   price,
 }: CourseCardProps) => {
+  const { toast } = useToast();
   const [isPaymentLoading, setIsPaymentLoading] = useState(false);
 
   const handleEnrollNow = async () => {
-    setIsPaymentLoading(true);
-    await loadRazorpayScript();
-    setIsPaymentLoading(false);
-
-    const options = {
-      key: RAZORPAY_KEY_ID,
-      amount: price || 100, // Changed from 99900 to 100 (Rs. 1 in paise)
-      currency: "INR",
-      name: title,
-      description: "Course enrollment fee",
-      image: image,
-      handler: function (response: any) {
-        alert("Payment successful! Payment Id: " + response.razorpay_payment_id);
-      },
-      prefill: {
-        name: "", // Optionally, student's name/email
-        email: "",
-      },
-      theme: {
-        color: "#6366f1",
-      },
-      modal: {
-        ondismiss: function () {
-          // console.log("Modal closed");
+    try {
+      setIsPaymentLoading(true);
+      await loadRazorpayScript();
+      
+      const options = {
+        key: RAZORPAY_KEY_ID,
+        amount: price ? price * 100 : 100, // Convert to paise (Rs. 1 = 100 paise)
+        currency: "INR",
+        name: title,
+        description: "Course enrollment fee",
+        image: image,
+        handler: function (response: any) {
+          toast({
+            title: "Payment Successful",
+            description: `Payment ID: ${response.razorpay_payment_id}`,
+            variant: "success"
+          });
+        },
+        prefill: {
+          name: "",
+          email: "",
+        },
+        theme: {
+          color: "#6366f1",
+        },
+        modal: {
+          ondismiss: function () {
+            setIsPaymentLoading(false);
+          }
         }
-      }
-    };
+      };
 
-    const rzp = new window.Razorpay(options);
-    rzp.open();
+      const rzp = new window.Razorpay(options);
+      rzp.on('payment.failed', function (response: any) {
+        toast({
+          title: "Payment Failed",
+          description: response.error.description || "Something went wrong",
+          variant: "destructive"
+        });
+        setIsPaymentLoading(false);
+      });
+      
+      rzp.open();
+    } catch (error) {
+      console.error("Payment initialization error:", error);
+      toast({
+        title: "Error",
+        description: "Failed to initialize payment",
+        variant: "destructive"
+      });
+      setIsPaymentLoading(false);
+    }
   };
 
   return (
