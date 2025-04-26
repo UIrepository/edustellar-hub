@@ -2,10 +2,11 @@
 import React, { useState } from "react";
 import { CardCustom, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from "@/components/ui/card-custom";
 import { ButtonCustom } from "@/components/ui/button-custom";
-import { Clock, Users, BookOpen, ArrowRight } from "lucide-react";
+import { Clock, Users, BookOpen, ArrowRight, CheckCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 
 interface CourseCardProps {
   id: string;
@@ -59,6 +60,8 @@ const CourseCard = ({
 }: CourseCardProps) => {
   const { toast } = useToast();
   const [isPaymentLoading, setIsPaymentLoading] = useState(false);
+  const [paymentSuccess, setPaymentSuccess] = useState(false);
+  const [paymentId, setPaymentId] = useState("");
 
   const handleEnrollNow = async () => {
     try {
@@ -73,11 +76,19 @@ const CourseCard = ({
         description: "Course enrollment fee",
         image: image,
         handler: function (response: any) {
+          // Store payment success state and ID
+          setPaymentSuccess(true);
+          setPaymentId(response.razorpay_payment_id);
+          
+          // Show toast notification
           toast({
             title: "Payment Successful",
             description: `Payment ID: ${response.razorpay_payment_id}`,
-            variant: "default" // Changed from 'success' to 'default'
+            variant: "default"
           });
+          
+          // Reset loading state
+          setIsPaymentLoading(false);
         },
         prefill: {
           name: "",
@@ -168,7 +179,29 @@ const CourseCard = ({
         </div>
       </CardContent>
       <CardFooter className="flex flex-col gap-4">
-        {!free ? (
+        {paymentSuccess ? (
+          <>
+            <Alert className="border-green-500 bg-green-50 dark:bg-green-900/20">
+              <CheckCircle className="h-4 w-4 text-green-500" />
+              <AlertTitle className="text-green-700 dark:text-green-300">Payment Successful!</AlertTitle>
+              <AlertDescription className="text-green-600 dark:text-green-400">
+                Your payment was processed successfully.
+                {paymentId && <div className="text-xs mt-1">Payment ID: {paymentId}</div>}
+              </AlertDescription>
+            </Alert>
+            <Link to={`/courses/${id}`} className="w-full">
+              <ButtonCustom
+                fullWidth
+                icon={<ArrowRight />}
+                iconPosition="right"
+                variant="primary"
+                className="bg-gradient-to-r from-green-400 to-green-500 hover:from-green-500 hover:to-green-600 shadow-lg hover:shadow-xl transition-all duration-300"
+              >
+                Start Learning
+              </ButtonCustom>
+            </Link>
+          </>
+        ) : !free ? (
           <ButtonCustom
             fullWidth
             variant="primary"

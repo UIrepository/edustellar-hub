@@ -4,10 +4,11 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { CardCustom, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card-custom";
 import { ButtonCustom } from "@/components/ui/button-custom";
-import { Clock, Users, BookOpen, Search, X, ArrowRight, Filter } from "lucide-react";
+import { Clock, Users, BookOpen, Search, X, ArrowRight, Filter, CheckCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 
 declare global {
   interface Window {
@@ -141,6 +142,8 @@ const CourseCard = ({ course, index }: CourseCardProps) => {
   const [isPaymentLoaded, setIsPaymentLoaded] = useState(false);
   const [isPaymentLoading, setIsPaymentLoading] = useState(false);
   const [paymentButtonId] = useState(`payment-button-${course.id}-${Date.now()}`);
+  const [paymentSuccess, setPaymentSuccess] = useState(false);
+  const [paymentId, setPaymentId] = useState("");
 
   useEffect(() => {
     if (!course.free && showPayment && paymentFormRef.current) {
@@ -173,11 +176,20 @@ const CourseCard = ({ course, index }: CourseCardProps) => {
         description: "Course enrollment fee",
         image: course.image,
         handler: function (response: any) {
+          // Store payment success state and ID
+          setPaymentSuccess(true);
+          setPaymentId(response.razorpay_payment_id);
+          
+          // Show toast notification
           toast({
             title: "Payment Successful",
             description: `Payment ID: ${response.razorpay_payment_id}`,
-            variant: "default" // Changed from 'success' to 'default'
+            variant: "default"
           });
+          
+          // Reset loading state and hide payment options
+          setIsPaymentLoading(false);
+          setShowPayment(false);
         },
         prefill: {
           name: "",
@@ -271,7 +283,29 @@ const CourseCard = ({ course, index }: CourseCardProps) => {
       </CardContent>
       
       <CardFooter className="flex flex-col gap-4">
-        {!course.free && !showPayment ? (
+        {paymentSuccess ? (
+          <>
+            <Alert className="border-green-500 bg-green-50 dark:bg-green-900/20">
+              <CheckCircle className="h-4 w-4 text-green-500" />
+              <AlertTitle className="text-green-700 dark:text-green-300">Payment Successful!</AlertTitle>
+              <AlertDescription className="text-green-600 dark:text-green-400">
+                Your payment was processed successfully.
+                {paymentId && <div className="text-xs mt-1">Payment ID: {paymentId}</div>}
+              </AlertDescription>
+            </Alert>
+            <Link to={`/courses/${course.id}`} className="w-full">
+              <ButtonCustom 
+                fullWidth 
+                icon={<ArrowRight />} 
+                iconPosition="right"
+                variant="primary"
+                className="bg-gradient-to-r from-green-400 to-green-500 hover:from-green-500 hover:to-green-600 shadow-lg hover:shadow-xl transition-all duration-300"
+              >
+                Start Learning
+              </ButtonCustom>
+            </Link>
+          </>
+        ) : !course.free && !showPayment ? (
           <ButtonCustom 
             fullWidth 
             variant="primary"
