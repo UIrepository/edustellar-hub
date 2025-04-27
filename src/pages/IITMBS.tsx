@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
@@ -5,6 +6,8 @@ import { ButtonCustom } from "@/components/ui/button-custom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { BranchNotesTab } from "@/components/iitmbs/BranchNotesTab";
 import { ToolsTab } from "@/components/iitmbs/ToolsTab";
+import { CardCustom, CardHeader, CardTitle, CardContent } from "@/components/ui/card-custom";
+import { Users, BookOpen, CalendarClock, Bell, Download, FileQuestion } from "lucide-react";
 
 const IITMBS = () => {
   const [activeTab, setActiveTab] = useState("notes");

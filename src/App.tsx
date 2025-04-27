@@ -22,6 +22,8 @@ import UnderMaintenance from "./pages/UnderMaintenance";
 import Admin from "./pages/Admin";
 import AdminLogin from "./pages/AdminLogin";
 import NEET from "./pages/NEET";
+import JEE from "./pages/JEE";
+import IITMBS from "./pages/IITMBS";
 
 const queryClient = new QueryClient();
 
@@ -51,6 +53,8 @@ const App = () => (
               
               {/* Exam Category Pages */}
               <Route path="/neet" element={<NEET />} />
+              <Route path="/jee" element={<JEE />} />
+              <Route path="/iitmbs" element={<IITMBS />} />
               
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />

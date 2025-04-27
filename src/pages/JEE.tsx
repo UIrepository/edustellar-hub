@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
@@ -5,6 +6,8 @@ import { ButtonCustom } from "@/components/ui/button-custom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { NotesTab } from "@/components/jee/NotesTab";
 import { PreviousYearTab } from "@/components/jee/PreviousYearTab";
+import { CardCustom, CardHeader, CardTitle, CardContent } from "@/components/ui/card-custom";
+import { Users, BookOpen, CalendarClock, Bell, Download, FileQuestion } from "lucide-react";
 
 const JEE = () => {
   const [activeTab, setActiveTab] = useState("notes");
