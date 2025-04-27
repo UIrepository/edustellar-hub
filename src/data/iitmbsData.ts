@@ -1,4 +1,3 @@
-
 // Subject types
 export type Subject = {
   name: string;
@@ -11,7 +10,6 @@ export type Course = {
   subjects: Subject[];
 };
 
-// Level filters
 export type Level = "foundation" | "diploma" | "degree";
 export type Branch = "data-science" | "electronic-systems";
 
@@ -20,55 +18,66 @@ export const dataScience: Record<Level, Course> = {
   foundation: {
     title: "Foundation Level",
     subjects: [
+      { name: "Mathematics for Data Science I" },
+      { name: "Statistics for Data Science I" },
+      { name: "Computational Thinking" },
       { name: "English I" },
-      { name: "Math for Data Science I" },
-      { name: "English II" },
-      { name: "Introduction to Programming" },
-      { name: "Introduction to Programming Laboratory" },
-      { name: "Introduction to Linux and Programming" },
-      { name: "Linux Systems Laboratory" },
-      { name: "Digital Systems" },
-      { name: "Probability and Statistics" },
-      { name: "Data Structures and Algorithms" },
-      { name: "Data Science Thinking and Algorithms" },
-      { name: "Data Science Thinking and Algorithms Lab" },
-      { name: "Machine Learning Introduction" }
+      { name: "Mathematics for Data Science II" },
+      { name: "Statistics for Data Science II" },
+      { name: "Programming in Python" },
+      { name: "English II" }
     ]
   },
   diploma: {
     title: "Diploma Level",
     subjects: [
-      { name: "Math for Data Science II" },
-      { name: "Advanced Data Structures" },
-      { name: "Statistics for Data Science" },
-      { name: "Data Science Algorithms" },
-      { name: "Data Science Algorithms Lab" },
-      { name: "Python Programming for Data Science" },
-      { name: "Data Visualization" },
-      { name: "Big Data Analytics" },
-      { name: "Data Mining" },
-      { name: "Data Science Project" }
+      { name: "Machine Learning Foundations" },
+      { name: "Business Data Management" },
+      { name: "Business Data Management - Project" },
+      { name: "Machine Learning Techniques" },
+      { name: "Machine Learning Practice" },
+      { name: "Machine Learning Practice - Project" },
+      { name: "Business Analytics" },
+      { name: "Tools in Data Science" }
     ]
   },
   degree: {
     title: "BS Degree Level",
     subjects: [
-      { name: "Machine Learning" },
+      { name: "Software Engineering" },
+      { name: "Software Testing" },
+      { name: "AI: Search Methods for Problem Solving" },
       { name: "Deep Learning" },
-      { name: "Natural Language Processing" },
-      { name: "Data Engineering" },
-      { name: "Cloud Computing" },
-      { name: "Data Science and Ethics" },
-      { name: "Statistical Inference" },
       { name: "Strategies for Professional Growth" },
-      { name: "Probability and Statistics (Elective)" },
-      { name: "Time Series Analysis (Elective)" },
-      { name: "Data Mining for Business Analytics (Elective)" },
-      { name: "Advanced Machine Learning (Elective)" },
-      { name: "AI and Robotics (Elective)" },
-      { name: "Data Security and Privacy (Elective)" },
-      { name: "Computer Vision (Elective)" },
-      { name: "Internet of Things (IoT) (Elective)" }
+      { name: "Algorithmic Thinking in Bioinformatics" },
+      { name: "Big Data and Biological Networks" },
+      { name: "Data Visualization Design" },
+      { name: "Special Topics in Machine Learning" },
+      { name: "Speech Technology" },
+      { name: "Design Thinking for Data-Driven App Development" },
+      { name: "Industry 4.0" },
+      { name: "Sequential Decision Making" },
+      { name: "Market Research" },
+      { name: "Privacy & Security in Online Social Media" },
+      { name: "Introduction to Big Data" },
+      { name: "Financial Forensics" },
+      { name: "Linear Statistical Models" },
+      { name: "Advanced Algorithms" },
+      { name: "Statistical Computing" },
+      { name: "Computer Systems Design" },
+      { name: "Programming in C" },
+      { name: "Mathematical Thinking" },
+      { name: "Large Language Models" },
+      { name: "Introduction to Natural Language Processing" },
+      { name: "Deep Learning for Computer Vision" },
+      { name: "Managerial Economics" },
+      { name: "Game Theory and Strategy" },
+      { name: "Corporate Finance" },
+      { name: "Deep Learning Practice" },
+      { name: "Operating Systems" },
+      { name: "Generative AI" },
+      { name: "Algorithms for Data Science" },
+      { name: "Machine Learning Operations" }
     ]
   }
 };
@@ -107,8 +116,7 @@ export const electronicSystems: Record<Level, Course> = {
       { name: "Digital Signal Processing" },
       { name: "Sensors and Applications" },
       { name: "Sensors Laboratory" },
-      { name: "Control Engineering" },
-      { name: "Electronics System Project" }
+      { name: "Control Engineering" }
     ]
   },
   degree: {
@@ -119,14 +127,36 @@ export const electronicSystems: Record<Level, Course> = {
       { name: "Electromagnetic Fields and Transmission Lines" },
       { name: "Electronic Product Design" },
       { name: "Strategies for Professional Growth" },
-      { name: "Probability and Statistics (Elective)" },
-      { name: "Communication Systems (Elective)" },
-      { name: "Internet of Things (IoT) (Elective)" },
-      { name: "Semiconductor Devices and VLSI Technology (Elective)" },
-      { name: "Analog Circuits (Elective)" },
-      { name: "Digital IC Design (Elective)" },
-      { name: "Power Management for Electronic Systems (Elective)" },
-      { name: "Biomedical Electronic Systems (Elective)" }
+      { name: "Probability and Statistics" },
+      { name: "Communication Systems" },
+      { name: "Internet of Things (IoT)" },
+      { name: "Semiconductor Devices and VLSI Technology" },
+      { name: "Analog Circuits" },
+      { name: "Digital IC Design" },
+      { name: "Power Management for Electronic Systems" },
+      { name: "Biomedical Electronic Systems" },
+      { name: "Operating Systems" },
+      { name: "Database Management Systems (DBMS)" },
+      { name: "Programming Data Structures and Algorithms using Python" },
+      { name: "Modern Application Development I" },
+      { name: "Machine Learning Foundation" },
+      { name: "Programming Concepts using Java" },
+      { name: "Modern Application Development II" },
+      { name: "Machine Learning Techniques" },
+      { name: "Machine Learning Practice" },
+      { name: "Deep Learning" },
+      { name: "Deep Learning for Computer Vision" },
+      { name: "Speech Technology" },
+      { name: "Deep Learning Practice" },
+      { name: "Industry 4.0" },
+      { name: "Design Thinking for Data-Driven App Development" },
+      { name: "Financial Forensics" },
+      { name: "Market Research" },
+      { name: "Game Theory and Strategy" },
+      { name: "Managerial Economics" },
+      { name: "Corporate Finance" },
+      { name: "Apprenticeship in Electronics Systems 1" },
+      { name: "Apprenticeship in Electronics Systems 2" }
     ]
   }
 };

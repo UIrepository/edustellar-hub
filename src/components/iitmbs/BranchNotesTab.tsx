@@ -5,10 +5,12 @@ import { FileText } from "lucide-react";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { dataScience, electronicSystems, Level, Branch } from "@/data/iitmbsData";
 import { DownloadButton } from "@/components/ui/download-button";
+import { SearchBar } from "@/components/ui/search-bar";
 
 export const BranchNotesTab = () => {
   const [selectedLevel, setSelectedLevel] = useState<Level>("foundation");
   const [selectedBranch, setSelectedBranch] = useState<Branch>("data-science");
+  const [searchQuery, setSearchQuery] = useState("");
 
   // Get the current branch data based on selection
   const getBranchData = () => {
@@ -16,9 +18,15 @@ export const BranchNotesTab = () => {
   };
 
   const currentLevelData = getBranchData()[selectedLevel];
+  
+  // Filter subjects based on search query
+  const filteredSubjects = currentLevelData.subjects.filter((subject) =>
+    subject.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <div className="space-y-6">
+      {/* Branch and Level Filters */}
       <div className="flex flex-col sm:flex-row gap-4 justify-between">
         <div>
           <h3 className="text-lg font-medium mb-2">Branch</h3>
@@ -58,11 +66,22 @@ export const BranchNotesTab = () => {
         </div>
       </div>
 
+      {/* Search Bar */}
+      <div className="w-full">
+        <SearchBar 
+          value={searchQuery} 
+          onChange={setSearchQuery}
+          placeholder="Search courses..."
+        />
+      </div>
+
       <div className="mt-8">
-        <h2 className="text-2xl font-bold mb-4">{currentLevelData.title} - {selectedBranch === "data-science" ? "Data Science" : "Electronic Systems"}</h2>
+        <h2 className="text-2xl font-bold mb-4">
+          {currentLevelData.title} - {selectedBranch === "data-science" ? "Data Science" : "Electronic Systems"}
+        </h2>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {currentLevelData.subjects.map((subject) => (
+          {filteredSubjects.map((subject) => (
             <CardCustom key={subject.name} glass className="col-span-1">
               <CardHeader>
                 <CardTitle>{subject.name}</CardTitle>
@@ -82,6 +101,12 @@ export const BranchNotesTab = () => {
             </CardCustom>
           ))}
         </div>
+
+        {filteredSubjects.length === 0 && (
+          <div className="text-center py-8 text-muted-foreground">
+            No courses found matching your search criteria.
+          </div>
+        )}
       </div>
     </div>
   );
