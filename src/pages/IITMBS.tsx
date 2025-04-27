@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
@@ -6,8 +5,11 @@ import { ButtonCustom } from "@/components/ui/button-custom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { BranchNotesTab } from "@/components/iitmbs/BranchNotesTab";
 import { ToolsTab } from "@/components/iitmbs/ToolsTab";
+import { PYQsTab } from "@/components/iitmbs/PYQsTab";
+import { CommunitiesTab } from "@/components/iitmbs/CommunitiesTab";
 import { CardCustom, CardHeader, CardTitle, CardContent } from "@/components/ui/card-custom";
-import { Users, BookOpen, CalendarClock, Bell, Download, FileQuestion } from "lucide-react";
+import { BookOpen, CalendarClock, Bell, FileQuestion } from "lucide-react";
+import { DownloadButton } from "@/components/ui/download-button";
 
 const IITMBS = () => {
   const [activeTab, setActiveTab] = useState("notes");
@@ -41,7 +43,7 @@ const IITMBS = () => {
                 <TabsTrigger value="notes">Notes</TabsTrigger>
                 <TabsTrigger value="tools">Tools</TabsTrigger>
                 <TabsTrigger value="pyqs">PYQs</TabsTrigger>
-                <TabsTrigger value="padhai-mitra">Padhai Mitra</TabsTrigger>
+                <TabsTrigger value="communities">Communities</TabsTrigger>
                 <TabsTrigger value="syllabus">Syllabus</TabsTrigger>
                 <TabsTrigger value="news">News</TabsTrigger>
                 <TabsTrigger value="dates">Important Dates</TabsTrigger>
@@ -56,99 +58,12 @@ const IITMBS = () => {
               </TabsContent>
               
               <TabsContent value="pyqs" className="mt-8">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {[
-                    { year: "2023", questions: 180 },
-                    { year: "2022", questions: 180 },
-                    { year: "2021", questions: 180 },
-                    { year: "2020", questions: 180 },
-                    { year: "2019", questions: 180 },
-                    { year: "2018", questions: 180 }
-                  ].map((pyq) => (
-                    <CardCustom key={pyq.year} glass hover>
-                      <CardHeader>
-                        <CardTitle className="flex items-center gap-2">
-                          <FileQuestion className="h-5 w-5" />
-                          IITM-BS {pyq.year} PYQ
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <p className="text-muted-foreground mb-4">
-                          {pyq.questions} questions with detailed solutions and explanations.
-                        </p>
-                        <ButtonCustom 
-                          variant="outline"
-                          icon={<Download className="h-4 w-4" />}
-                          iconPosition="right"
-                        >
-                          Download PYQ
-                        </ButtonCustom>
-                      </CardContent>
-                    </CardCustom>
-                  ))}
-                </div>
+                <PYQsTab />
               </TabsContent>
               
-              {/* Padhai Mitra Tab */}
-              <TabsContent value="padhai-mitra" className="mt-8">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <CardCustom glass>
-                    <CardHeader>
-                      <CardTitle className="flex items-center gap-2">
-                        <Users className="h-5 w-5" />
-                        Community Links
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-muted-foreground mb-6">
-                        Join our IITM-BS preparation community to connect with other aspirants, mentors, and experts. Share resources, ask questions, and stay motivated together.
-                      </p>
-                      
-                      <div className="space-y-4">
-                        <div className="flex items-center justify-between gap-4">
-                          <div>
-                            <h4 className="font-medium">WhatsApp Group</h4>
-                            <p className="text-sm text-muted-foreground">Join our active WhatsApp community</p>
-                          </div>
-                          <ButtonCustom>Join Group</ButtonCustom>
-                        </div>
-                        
-                        <div className="flex items-center justify-between gap-4">
-                          <div>
-                            <h4 className="font-medium">Telegram Channel</h4>
-                            <p className="text-sm text-muted-foreground">Get regular updates and resources</p>
-                          </div>
-                          <ButtonCustom>Subscribe</ButtonCustom>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </CardCustom>
-                  
-                  <CardCustom glass>
-                    <CardHeader>
-                      <CardTitle className="flex items-center gap-2">
-                        <BookOpen className="h-5 w-5" />
-                        Study Guides
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-muted-foreground mb-6">
-                        Our expert-created study guides will help you navigate through IITM-BS preparation effectively with optimized study plans, topic-wise strategies, and exam-taking tips.
-                      </p>
-                      
-                      <div className="space-y-4">
-                        {["Data Science Study Guide", "Electronic Systems Study Guide"].map((guide) => (
-                          <div key={guide} className="flex items-center justify-between gap-4">
-                            <h4 className="font-medium">{guide}</h4>
-                            <ButtonCustom variant="outline" size="sm" icon={<Download className="h-4 w-4" />} iconPosition="right">
-                              Download
-                            </ButtonCustom>
-                          </div>
-                        ))}
-                      </div>
-                    </CardContent>
-                  </CardCustom>
-                </div>
+              {/* Communities Tab */}
+              <TabsContent value="communities" className="mt-8">
+                <CommunitiesTab />
               </TabsContent>
               
               {/* Syllabus Tab */}
@@ -184,12 +99,11 @@ const IITMBS = () => {
                     </div>
                     
                     <div className="mt-6 flex justify-center">
-                      <ButtonCustom 
-                        icon={<Download className="h-4 w-4" />} 
-                        iconPosition="left"
-                      >
-                        Download Complete IITM-BS Syllabus
-                      </ButtonCustom>
+                      <DownloadButton
+                        fileName="IITM_BS_Complete_Syllabus.pdf"
+                        label="Download Complete IITM-BS Syllabus"
+                        initialCount={423}
+                      />
                     </div>
                   </CardContent>
                 </CardCustom>

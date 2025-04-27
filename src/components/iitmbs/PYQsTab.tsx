@@ -1,21 +1,14 @@
 
 import { useState } from "react";
 import { CardCustom, CardHeader, CardTitle, CardContent } from "@/components/ui/card-custom";
-import { FileText } from "lucide-react";
+import { FileQuestion } from "lucide-react";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { dataScience, electronicSystems, Level, Branch } from "@/data/iitmbsData";
+import { Level, Branch, pyqsData } from "@/data/iitmbsData";
 import { DownloadButton } from "@/components/ui/download-button";
 
-export const BranchNotesTab = () => {
+export const PYQsTab = () => {
   const [selectedLevel, setSelectedLevel] = useState<Level>("foundation");
   const [selectedBranch, setSelectedBranch] = useState<Branch>("data-science");
-
-  // Get the current branch data based on selection
-  const getBranchData = () => {
-    return selectedBranch === "data-science" ? dataScience : electronicSystems;
-  };
-
-  const currentLevelData = getBranchData()[selectedLevel];
 
   return (
     <div className="space-y-6">
@@ -58,30 +51,30 @@ export const BranchNotesTab = () => {
         </div>
       </div>
 
-      <div className="mt-8">
-        <h2 className="text-2xl font-bold mb-4">{currentLevelData.title} - {selectedBranch === "data-science" ? "Data Science" : "Electronic Systems"}</h2>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {currentLevelData.subjects.map((subject) => (
-            <CardCustom key={subject.name} glass className="col-span-1">
-              <CardHeader>
-                <CardTitle>{subject.name}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <FileText className="h-4 w-4" />
-                    <span>Course Notes</span>
-                  </div>
-                  <DownloadButton 
-                    fileName={`${subject.name.toLowerCase().replace(/\s+/g, '_')}_notes.pdf`}
-                    initialCount={Math.floor(Math.random() * 100) + 10}
-                  />
-                </div>
-              </CardContent>
-            </CardCustom>
-          ))}
-        </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+        {pyqsData.map((pyq) => (
+          <CardCustom key={pyq.year} glass hover>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <FileQuestion className="h-5 w-5" />
+                IITM-BS {pyq.year} PYQ
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-muted-foreground mb-4">
+                {pyq.questions} questions with detailed solutions and explanations.
+                <span className="block mt-1 text-sm">
+                  Relevant for: {selectedBranch === "data-science" ? "Data Science" : "Electronic Systems"} ({selectedLevel})
+                </span>
+              </p>
+              <DownloadButton 
+                fileName={`IITM_BS_${selectedBranch}_${selectedLevel}_${pyq.year}_pyq.pdf`}
+                initialCount={pyq.downloads}
+                label="Download PYQ"
+              />
+            </CardContent>
+          </CardCustom>
+        ))}
       </div>
     </div>
   );

@@ -1,16 +1,16 @@
 
 import { CardCustom, CardHeader, CardTitle, CardContent } from "@/components/ui/card-custom";
-import { ButtonCustom } from "@/components/ui/button-custom";
-import { FileQuestion, Download } from "lucide-react";
+import { FileQuestion } from "lucide-react";
+import { DownloadButton } from "@/components/ui/download-button";
 
 export const PreviousYearTab = () => {
   const pyqs = [
-    { year: "2023", questions: 180 },
-    { year: "2022", questions: 180 },
-    { year: "2021", questions: 180 },
-    { year: "2020", questions: 180 },
-    { year: "2019", questions: 180 },
-    { year: "2018", questions: 180 }
+    { year: "2023", questions: 180, downloads: 342 },
+    { year: "2022", questions: 180, downloads: 289 },
+    { year: "2021", questions: 180, downloads: 253 },
+    { year: "2020", questions: 180, downloads: 217 },
+    { year: "2019", questions: 180, downloads: 185 },
+    { year: "2018", questions: 180, downloads: 156 }
   ];
 
   return (
@@ -27,13 +27,11 @@ export const PreviousYearTab = () => {
             <p className="text-muted-foreground mb-4">
               {pyq.questions} questions with detailed solutions and explanations.
             </p>
-            <ButtonCustom 
-              variant="outline"
-              icon={<Download className="h-4 w-4" />}
-              iconPosition="right"
-            >
-              Download PYQ
-            </ButtonCustom>
+            <DownloadButton
+              fileName={`jee_${pyq.year}_pyq.pdf`}
+              label="Download PYQ"
+              initialCount={pyq.downloads}
+            />
           </CardContent>
         </CardCustom>
       ))}

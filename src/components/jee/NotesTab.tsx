@@ -1,7 +1,7 @@
 
 import { CardCustom, CardHeader, CardTitle, CardContent } from "@/components/ui/card-custom";
-import { ButtonCustom } from "@/components/ui/button-custom";
-import { FileText, Download } from "lucide-react";
+import { FileText } from "lucide-react";
+import { DownloadButton } from "@/components/ui/download-button";
 
 export const NotesTab = () => {
   return (
@@ -18,13 +18,11 @@ export const NotesTab = () => {
             <p className="text-muted-foreground mb-4">
               Comprehensive {subject.toLowerCase()} notes covering all JEE topics with solved examples.
             </p>
-            <ButtonCustom 
-              variant="outline"
-              icon={<Download className="h-4 w-4" />}
-              iconPosition="right"
-            >
-              Download Notes
-            </ButtonCustom>
+            <DownloadButton
+              fileName={`jee_${subject.toLowerCase()}_notes.pdf`}
+              label="Download Notes"
+              initialCount={Math.floor(Math.random() * 200) + 50}
+            />
           </CardContent>
         </CardCustom>
       ))}
