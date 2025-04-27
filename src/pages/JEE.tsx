@@ -1,11 +1,10 @@
 import { useState } from "react";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
-import { CardCustom, CardHeader, CardTitle, CardContent } from "@/components/ui/card-custom";
 import { ButtonCustom } from "@/components/ui/button-custom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { FileText, Download, BookOpen, Users, CalendarClock, Bell, FileQuestion } from "lucide-react";
-import { Link } from "react-router-dom";
+import { NotesTab } from "@/components/jee/NotesTab";
+import { PreviousYearTab } from "@/components/jee/PreviousYearTab";
 
 const JEE = () => {
   const [activeTab, setActiveTab] = useState("notes");
@@ -45,64 +44,11 @@ const JEE = () => {
               </TabsList>
               
               <TabsContent value="notes" className="mt-8">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  {["Physics", "Chemistry", "Mathematics"].map((subject) => (
-                    <CardCustom key={subject} glass hover>
-                      <CardHeader>
-                        <CardTitle className="flex items-center gap-2">
-                          <FileText className="h-5 w-5" />
-                          {subject} Notes
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <p className="text-muted-foreground mb-4">
-                          Comprehensive {subject.toLowerCase()} notes covering all JEE topics with solved examples.
-                        </p>
-                        <ButtonCustom 
-                          variant="outline"
-                          icon={<Download className="h-4 w-4" />}
-                          iconPosition="right"
-                        >
-                          Download Notes
-                        </ButtonCustom>
-                      </CardContent>
-                    </CardCustom>
-                  ))}
-                </div>
+                <NotesTab />
               </TabsContent>
               
               <TabsContent value="pyqs" className="mt-8">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {[
-                    { year: "2023", questions: 180 },
-                    { year: "2022", questions: 180 },
-                    { year: "2021", questions: 180 },
-                    { year: "2020", questions: 180 },
-                    { year: "2019", questions: 180 },
-                    { year: "2018", questions: 180 }
-                  ].map((pyq) => (
-                    <CardCustom key={pyq.year} glass hover>
-                      <CardHeader>
-                        <CardTitle className="flex items-center gap-2">
-                          <FileQuestion className="h-5 w-5" />
-                          JEE {pyq.year} PYQ
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <p className="text-muted-foreground mb-4">
-                          {pyq.questions} questions with detailed solutions and explanations.
-                        </p>
-                        <ButtonCustom 
-                          variant="outline"
-                          icon={<Download className="h-4 w-4" />}
-                          iconPosition="right"
-                        >
-                          Download PYQ
-                        </ButtonCustom>
-                      </CardContent>
-                    </CardCustom>
-                  ))}
-                </div>
+                <PreviousYearTab />
               </TabsContent>
               
               <TabsContent value="padhai-mitra" className="mt-8">

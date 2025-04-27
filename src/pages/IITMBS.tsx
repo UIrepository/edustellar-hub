@@ -1,11 +1,10 @@
 import { useState } from "react";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
-import { CardCustom, CardHeader, CardTitle, CardContent } from "@/components/ui/card-custom";
 import { ButtonCustom } from "@/components/ui/button-custom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { FileText, Download, BookOpen, Users, CalendarClock, Bell, FileQuestion, Calculator } from "lucide-react";
-import { Link } from "react-router-dom";
+import { BranchNotesTab } from "@/components/iitmbs/BranchNotesTab";
+import { ToolsTab } from "@/components/iitmbs/ToolsTab";
 
 const IITMBS = () => {
   const [activeTab, setActiveTab] = useState("notes");
@@ -46,86 +45,11 @@ const IITMBS = () => {
               </TabsList>
               
               <TabsContent value="notes" className="mt-8">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {[
-                    {
-                      title: "Data Science",
-                      subjects: ["Programming", "Statistics", "Machine Learning"]
-                    },
-                    {
-                      title: "Electronic Systems",
-                      subjects: ["Digital Electronics", "Circuit Theory", "Signal Processing"]
-                    }
-                  ].map((branch) => (
-                    <CardCustom key={branch.title} glass className="col-span-1">
-                      <CardHeader>
-                        <CardTitle>{branch.title}</CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="space-y-4">
-                          {branch.subjects.map((subject) => (
-                            <div key={subject} className="flex items-center justify-between">
-                              <div className="flex items-center gap-2">
-                                <FileText className="h-4 w-4" />
-                                <span>{subject}</span>
-                              </div>
-                              <ButtonCustom 
-                                variant="outline"
-                                size="sm"
-                                icon={<Download className="h-4 w-4" />}
-                                iconPosition="right"
-                              >
-                                Download
-                              </ButtonCustom>
-                            </div>
-                          ))}
-                        </div>
-                      </CardContent>
-                    </CardCustom>
-                  ))}
-                </div>
+                <BranchNotesTab />
               </TabsContent>
 
               <TabsContent value="tools" className="mt-8">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  {[
-                    {
-                      title: "Grade Calculator",
-                      description: "Calculate your grades based on assignments and exams",
-                      icon: Calculator
-                    },
-                    {
-                      title: "Marks Predictor",
-                      description: "Predict your final marks based on current performance",
-                      icon: Calculator
-                    },
-                    {
-                      title: "CGPA Calculator",
-                      description: "Calculate your Cumulative Grade Point Average",
-                      icon: Calculator
-                    }
-                  ].map((tool) => (
-                    <CardCustom key={tool.title} glass hover className="group">
-                      <CardHeader>
-                        <CardTitle className="flex items-center gap-2">
-                          <tool.icon className="h-5 w-5" />
-                          {tool.title}
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <p className="text-muted-foreground mb-4">
-                          {tool.description}
-                        </p>
-                        <ButtonCustom 
-                          variant="outline"
-                          fullWidth
-                        >
-                          Open Tool
-                        </ButtonCustom>
-                      </CardContent>
-                    </CardCustom>
-                  ))}
-                </div>
+                <ToolsTab />
               </TabsContent>
               
               <TabsContent value="pyqs" className="mt-8">
