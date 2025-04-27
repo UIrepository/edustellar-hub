@@ -54,7 +54,7 @@ const App = () => (
               {/* Exam Category Pages */}
               <Route path="/neet" element={<NEET />} />
               <Route path="/jee" element={<JEE />} />
-              <Route path="/iitmbs" element={<IITMBS />} />
+              <Route path="/iitm-bs" element={<IITMBS />} /> {/* Updated the route to include hyphen */}
               
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
