@@ -1,3 +1,4 @@
+
 // Subject types
 export type Subject = {
   name: string;
@@ -10,7 +11,7 @@ export type Course = {
   subjects: Subject[];
 };
 
-export type Level = "foundation" | "diploma" | "degree";
+export type Level = "foundation" | "diploma" | "degree" | "qualifier";
 export type Branch = "data-science" | "electronic-systems";
 
 // Data Science Courses
@@ -78,6 +79,17 @@ export const dataScience: Record<Level, Course> = {
       { name: "Generative AI" },
       { name: "Algorithms for Data Science" },
       { name: "Machine Learning Operations" }
+    ]
+  },
+  qualifier: {
+    title: "Qualifier Preparation",
+    subjects: [
+      { name: "Mathematics for Data Science" },
+      { name: "Statistics for Data Science" },
+      { name: "Programming Fundamentals" },
+      { name: "Data Structures" },
+      { name: "Algorithms" },
+      { name: "Machine Learning Basics" }
     ]
   }
 };
@@ -158,6 +170,17 @@ export const electronicSystems: Record<Level, Course> = {
       { name: "Apprenticeship in Electronics Systems 1" },
       { name: "Apprenticeship in Electronics Systems 2" }
     ]
+  },
+  qualifier: {
+    title: "Qualifier Preparation",
+    subjects: [
+      { name: "Electronics Fundamentals" },
+      { name: "Circuit Analysis" },
+      { name: "Digital Logic" },
+      { name: "Mathematics for Electronics" },
+      { name: "Programming Concepts" },
+      { name: "Basic Signal Processing" }
+    ]
   }
 };
 
@@ -190,6 +213,14 @@ export const communitiesData = {
         { name: "Deep Learning" },
         { name: "Statistical Computing" },
         { name: "Computer Systems Design" }
+      ],
+      qualifier: [
+        { name: "Mathematics for Data Science" },
+        { name: "Statistics for Data Science" },
+        { name: "Programming Fundamentals" },
+        { name: "Data Structures" },
+        { name: "Algorithms" },
+        { name: "Machine Learning Basics" }
       ]
     },
     qualifiers: "Data Science Qualifiers"
@@ -219,6 +250,14 @@ export const communitiesData = {
         { name: "Communication Systems" },
         { name: "Digital IC Design" },
         { name: "Power Management for Electronic Systems" }
+      ],
+      qualifier: [
+        { name: "Electronics Fundamentals" },
+        { name: "Circuit Analysis" },
+        { name: "Digital Logic" },
+        { name: "Mathematics for Electronics" },
+        { name: "Programming Concepts" },
+        { name: "Basic Signal Processing" }
       ]
     },
     qualifiers: "Electronic Systems Qualifiers"

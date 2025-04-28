@@ -1,11 +1,13 @@
 
 import { useState } from "react";
 import { CardCustom, CardHeader, CardTitle, CardContent } from "@/components/ui/card-custom";
-import { FileText } from "lucide-react";
+import { FileText, Send } from "lucide-react";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { dataScience, electronicSystems, Level, Branch } from "@/data/iitmbsData";
 import { DownloadButton } from "@/components/ui/download-button";
 import { SearchBar } from "@/components/ui/search-bar";
+import { Link } from "react-router-dom";
+import { ButtonCustom } from "@/components/ui/button-custom";
 
 export const BranchNotesTab = () => {
   const [selectedLevel, setSelectedLevel] = useState<Level>("foundation");
@@ -26,6 +28,22 @@ export const BranchNotesTab = () => {
 
   return (
     <div className="space-y-6">
+      {/* Unified Telegram Group Banner */}
+      <CardCustom glass className="bg-primary/5">
+        <CardContent className="p-4">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <div>
+              <h3 className="font-medium">Join the United IITM BS Community</h3>
+              <p className="text-sm text-muted-foreground">Get help, share resources, and connect with other students</p>
+            </div>
+            <ButtonCustom className="bg-blue-500 hover:bg-blue-600" size="sm">
+              <Send className="h-4 w-4 mr-2" />
+              Join Telegram Group
+            </ButtonCustom>
+          </div>
+        </CardContent>
+      </CardCustom>
+
       {/* Branch and Level Filters */}
       <div className="flex flex-col sm:flex-row gap-4 justify-between">
         <div>
@@ -62,6 +80,9 @@ export const BranchNotesTab = () => {
             <ToggleGroupItem value="degree" className="px-3 py-2">
               BS Degree
             </ToggleGroupItem>
+            <ToggleGroupItem value="qualifier" className="px-3 py-2">
+              Qualifier
+            </ToggleGroupItem>
           </ToggleGroup>
         </div>
       </div>
@@ -92,10 +113,17 @@ export const BranchNotesTab = () => {
                     <FileText className="h-4 w-4" />
                     <span>Course Notes</span>
                   </div>
-                  <DownloadButton 
-                    fileName={`${subject.name.toLowerCase().replace(/\s+/g, '_')}_notes.pdf`}
-                    initialCount={Math.floor(Math.random() * 100) + 10}
-                  />
+                  <div className="flex gap-2">
+                    <DownloadButton 
+                      fileName={`${subject.name.toLowerCase().replace(/\s+/g, '_')}_notes.pdf`}
+                      initialCount={Math.floor(Math.random() * 100) + 10}
+                    />
+                    <Link to={`/iitm-bs/subjects/${subject.name.toLowerCase().replace(/\s+/g, '-')}`}>
+                      <ButtonCustom size="sm" variant="outline">
+                        View All Notes
+                      </ButtonCustom>
+                    </Link>
+                  </div>
                 </div>
               </CardContent>
             </CardCustom>

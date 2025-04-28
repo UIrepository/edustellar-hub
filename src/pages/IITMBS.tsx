@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
@@ -8,7 +9,7 @@ import { ToolsTab } from "@/components/iitmbs/ToolsTab";
 import { PYQsTab } from "@/components/iitmbs/PYQsTab";
 import { CommunitiesTab } from "@/components/iitmbs/CommunitiesTab";
 import { CardCustom, CardHeader, CardTitle, CardContent } from "@/components/ui/card-custom";
-import { BookOpen, CalendarClock, Bell, FileQuestion } from "lucide-react";
+import { BookOpen, CalendarClock, Bell, FileQuestion, Send } from "lucide-react";
 import { DownloadButton } from "@/components/ui/download-button";
 
 const IITMBS = () => {
@@ -31,8 +32,37 @@ const IITMBS = () => {
               <div className="flex flex-wrap gap-4 animate-slide-up animate-delay-200">
                 <ButtonCustom>Start Learning</ButtonCustom>
                 <ButtonCustom variant="outline">View Tools</ButtonCustom>
+                <ButtonCustom className="bg-blue-500 hover:bg-blue-600">
+                  <Send className="h-4 w-4 mr-2" />
+                  Join Official Telegram
+                </ButtonCustom>
               </div>
             </div>
+          </div>
+        </section>
+
+        {/* United IITM BS Telegram Group Banner */}
+        <section className="py-4 bg-primary/5">
+          <div className="container mx-auto px-4">
+            <CardCustom glass>
+              <CardContent className="p-4">
+                <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+                  <div className="flex items-center gap-3">
+                    <div className="bg-blue-500 text-white p-2 rounded-full">
+                      <Send className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <h3 className="font-medium">Join the United IITM BS Community</h3>
+                      <p className="text-sm text-muted-foreground">Get help, share resources, and connect with other students across all specializations</p>
+                    </div>
+                  </div>
+                  <ButtonCustom className="bg-blue-500 hover:bg-blue-600 whitespace-nowrap">
+                    <Send className="h-4 w-4 mr-2" />
+                    Join Telegram Group
+                  </ButtonCustom>
+                </div>
+              </CardContent>
+            </CardCustom>
           </div>
         </section>
         
