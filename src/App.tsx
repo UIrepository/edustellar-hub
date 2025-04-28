@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -24,6 +23,7 @@ import AdminLogin from "./pages/AdminLogin";
 import NEET from "./pages/NEET";
 import JEE from "./pages/JEE";
 import IITMBS from "./pages/IITMBS";
+import { SubjectPage } from "@/components/iitmbs/SubjectPage";
 
 const queryClient = new QueryClient();
 
@@ -51,12 +51,9 @@ const App = () => (
               <Route path="/admin" element={<Admin />} />
               <Route path="/admin-login" element={<AdminLogin />} />
               
-              {/* Exam Category Pages */}
-              <Route path="/neet" element={<NEET />} />
-              <Route path="/jee" element={<JEE />} />
-              <Route path="/iitm-bs" element={<IITMBS />} /> {/* Updated the route to include hyphen */}
+              <Route path="/iitm-bs" element={<IITMBS />} />
+              <Route path="/iitm-bs/subjects/:subjectId" element={<SubjectPage />} />
               
-              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>

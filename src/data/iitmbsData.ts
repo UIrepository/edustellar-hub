@@ -161,50 +161,66 @@ export const electronicSystems: Record<Level, Course> = {
   }
 };
 
-// Community Data
+// Updated Community Data
 export const communitiesData = {
   dataScience: {
-    subjects: [
-      "English",
-      "Math for Data Science",
-      "Programming",
-      "Linux and Programming",
-      "Digital Systems",
-      "Probability and Statistics",
-      "Data Structures and Algorithms",
-      "Data Science Thinking",
-      "Machine Learning",
-      "Advanced Data Structures",
-      "Data Visualization",
-      "Big Data Analytics",
-      "Data Mining",
-      "Deep Learning",
-      "Natural Language Processing",
-      "Data Engineering",
-      "Cloud Computing"
-    ],
+    subjects: {
+      foundation: [
+        { name: "Mathematics for Data Science I" },
+        { name: "Statistics for Data Science I" },
+        { name: "Computational Thinking" },
+        { name: "English I" },
+        { name: "Mathematics for Data Science II" },
+        { name: "Statistics for Data Science II" },
+        { name: "Programming in Python" },
+        { name: "English II" }
+      ],
+      diploma: [
+        { name: "Machine Learning Foundations" },
+        { name: "Business Data Management" },
+        { name: "Machine Learning Techniques" },
+        { name: "Machine Learning Practice" },
+        { name: "Business Analytics" },
+        { name: "Tools in Data Science" }
+      ],
+      degree: [
+        { name: "Software Engineering" },
+        { name: "Software Testing" },
+        { name: "AI: Search Methods for Problem Solving" },
+        { name: "Deep Learning" },
+        { name: "Statistical Computing" },
+        { name: "Computer Systems Design" }
+      ]
+    },
     qualifiers: "Data Science Qualifiers"
   },
   electronicSystems: {
-    subjects: [
-      "English",
-      "Math for Electronics",
-      "Electronic Systems",
-      "C Programming",
-      "Linux and Programming",
-      "Digital Systems",
-      "Electronic Circuits",
-      "Embedded C Programming",
-      "Signals and Systems",
-      "Analog Electronics",
-      "Python Programming",
-      "Digital System Design",
-      "Digital Signal Processing",
-      "Sensors and Applications",
-      "Control Engineering",
-      "Embedded Linux and FPGAs",
-      "Electromagnetic Fields"
-    ],
+    subjects: {
+      foundation: [
+        { name: "English I" },
+        { name: "Math for Electronics I" },
+        { name: "Electronic Systems Thinking and Circuits" },
+        { name: "Introduction to C Programming" },
+        { name: "Digital Systems" },
+        { name: "Embedded C Programming" }
+      ],
+      diploma: [
+        { name: "Math for Electronics II" },
+        { name: "Signals and Systems" },
+        { name: "Analog Electronic Systems" },
+        { name: "Python Programming" },
+        { name: "Digital System Design" },
+        { name: "Digital Signal Processing" }
+      ],
+      degree: [
+        { name: "Embedded Linux and FPGAs" },
+        { name: "Electromagnetic Fields and Transmission Lines" },
+        { name: "Electronic Product Design" },
+        { name: "Communication Systems" },
+        { name: "Digital IC Design" },
+        { name: "Power Management for Electronic Systems" }
+      ]
+    },
     qualifiers: "Electronic Systems Qualifiers"
   }
 };
