@@ -1,8 +1,7 @@
-
 import { useState } from "react";
 import { CardCustom, CardHeader, CardTitle, CardContent } from "@/components/ui/card-custom";
 import { ButtonCustom } from "@/components/ui/button-custom";
-import { Users, MessageCircle, Telegram } from "lucide-react";
+import { Users, MessageSquare, Send } from "lucide-react";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Branch, Level, communitiesData } from "@/data/iitmbsData";
 import { Link } from "react-router-dom";
@@ -78,11 +77,11 @@ export const CommunitiesTab = () => {
                   <p className="text-xs text-muted-foreground mb-3">Active discussion groups</p>
                   <div className="flex gap-2">
                     <ButtonCustom size="sm" variant="outline" className="flex-1">
-                      <MessageCircle className="h-4 w-4 mr-2" />
+                      <MessageSquare className="h-4 w-4 mr-2" />
                       WhatsApp
                     </ButtonCustom>
                     <ButtonCustom size="sm" variant="outline" className="flex-1">
-                      <Telegram className="h-4 w-4 mr-2" />
+                      <Send className="h-4 w-4 mr-2" />
                       Telegram
                     </ButtonCustom>
                     <Link 
@@ -120,11 +119,11 @@ export const CommunitiesTab = () => {
                 </p>
                 <div className="flex gap-2">
                   <ButtonCustom className="flex-1">
-                    <MessageCircle className="h-4 w-4 mr-2" />
+                    <MessageSquare className="h-4 w-4 mr-2" />
                     Join WhatsApp
                   </ButtonCustom>
                   <ButtonCustom className="flex-1">
-                    <Telegram className="h-4 w-4 mr-2" />
+                    <Send className="h-4 w-4 mr-2" />
                     Join Telegram
                   </ButtonCustom>
                 </div>
