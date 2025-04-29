@@ -1,4 +1,3 @@
-
 // Subject types
 export type Subject = {
   name: string;
@@ -84,12 +83,13 @@ export const dataScience: Record<Level, Course> = {
   qualifier: {
     title: "Qualifier Preparation",
     subjects: [
-      { name: "Mathematics for Data Science" },
-      { name: "Statistics for Data Science" },
-      { name: "Programming Fundamentals" },
+      { name: "Mathematics for Data Science I" },
+      { name: "Statistics for Data Science I" },
+      { name: "Computational Thinking" },
+      { name: "English I" },
+      { name: "Machine Learning Basics" },
       { name: "Data Structures" },
-      { name: "Algorithms" },
-      { name: "Machine Learning Basics" }
+      { name: "Algorithms" }
     ]
   }
 };
@@ -101,18 +101,10 @@ export const electronicSystems: Record<Level, Course> = {
     subjects: [
       { name: "English I" },
       { name: "Math for Electronics I" },
-      { name: "English II" },
       { name: "Electronic Systems Thinking and Circuits" },
-      { name: "Electronic Systems Thinking and Circuits Lab" },
       { name: "Introduction to C Programming" },
-      { name: "C Programming Laboratory" },
-      { name: "Introduction to Linux and Programming" },
-      { name: "Linux Systems Laboratory" },
       { name: "Digital Systems" },
-      { name: "Electrical and Electronic Circuits" },
-      { name: "Electronics Laboratory" },
-      { name: "Embedded C Programming" },
-      { name: "Embedded C Programming Laboratory" }
+      { name: "Embedded C Programming" }
     ]
   },
   diploma: {
@@ -174,11 +166,12 @@ export const electronicSystems: Record<Level, Course> = {
   qualifier: {
     title: "Qualifier Preparation",
     subjects: [
-      { name: "Electronics Fundamentals" },
-      { name: "Circuit Analysis" },
+      { name: "English I" },
+      { name: "Math for Electronics I" },
+      { name: "Electronic Systems Thinking and Circuits" },
+      { name: "Introduction to C Programming" },
       { name: "Digital Logic" },
       { name: "Mathematics for Electronics" },
-      { name: "Programming Concepts" },
       { name: "Basic Signal Processing" }
     ]
   }
@@ -201,8 +194,10 @@ export const communitiesData = {
       diploma: [
         { name: "Machine Learning Foundations" },
         { name: "Business Data Management" },
+        { name: "Business Data Management - Project" },
         { name: "Machine Learning Techniques" },
         { name: "Machine Learning Practice" },
+        { name: "Machine Learning Practice - Project" },
         { name: "Business Analytics" },
         { name: "Tools in Data Science" }
       ],
@@ -215,12 +210,13 @@ export const communitiesData = {
         { name: "Computer Systems Design" }
       ],
       qualifier: [
-        { name: "Mathematics for Data Science" },
-        { name: "Statistics for Data Science" },
-        { name: "Programming Fundamentals" },
+        { name: "Mathematics for Data Science I" },
+        { name: "Statistics for Data Science I" },
+        { name: "Computational Thinking" },
+        { name: "English I" },
+        { name: "Machine Learning Basics" },
         { name: "Data Structures" },
-        { name: "Algorithms" },
-        { name: "Machine Learning Basics" }
+        { name: "Algorithms" }
       ]
     },
     qualifiers: "Data Science Qualifiers"
@@ -252,11 +248,12 @@ export const communitiesData = {
         { name: "Power Management for Electronic Systems" }
       ],
       qualifier: [
-        { name: "Electronics Fundamentals" },
-        { name: "Circuit Analysis" },
+        { name: "English I" },
+        { name: "Math for Electronics I" },
+        { name: "Electronic Systems Thinking and Circuits" },
+        { name: "Introduction to C Programming" },
         { name: "Digital Logic" },
         { name: "Mathematics for Electronics" },
-        { name: "Programming Concepts" },
         { name: "Basic Signal Processing" }
       ]
     },

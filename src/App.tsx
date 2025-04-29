@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -13,6 +14,8 @@ import NotFound from "./pages/NotFound";
 import About from "./pages/About";
 import InternVerification from "./pages/InternVerification";
 import Career from "./pages/Career";
+import JobsCareer from "./pages/JobsCareer"; // Added new JobsCareer page
+import EmployeeVerification from "./pages/EmployeeVerification"; // Added new EmployeeVerification page
 import Partnerships from "./pages/Partnerships";
 import TermsAndConditions from "./pages/TermsAndConditions";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
@@ -43,6 +46,8 @@ const App = () => (
               <Route path="/about" element={<About />} />
               <Route path="/intern-verification" element={<InternVerification />} />
               <Route path="/career" element={<Career />} />
+              <Route path="/jobs" element={<JobsCareer />} /> {/* Added new route */}
+              <Route path="/employee-verification" element={<EmployeeVerification />} /> {/* Added new route */}
               <Route path="/partnerships" element={<Partnerships />} />
               <Route path="/terms" element={<TermsAndConditions />} />
               <Route path="/privacy" element={<PrivacyPolicy />} />

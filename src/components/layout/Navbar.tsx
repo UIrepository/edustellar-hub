@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useTheme } from "@/context/ThemeContext";
@@ -21,6 +20,7 @@ const Navbar = () => {
     { name: "NEET", path: "/neet" },
     { name: "JEE", path: "/jee" },
     { name: "IIT-M BS", path: "/iitm-bs" },
+    { name: "Career", path: "/career" }, // Added Career link
     { name: "About", path: "/about" },
   ];
 
