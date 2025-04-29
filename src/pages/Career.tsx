@@ -9,6 +9,28 @@ import { useState } from "react";
 import { ArrowRight, BriefcaseBusiness, GraduationCap, Layers, Send } from "lucide-react";
 import { toast } from "sonner";
 
+// Added a preview of current job openings
+const featuredJobs = [
+  {
+    title: "Content Developer (Computer Science)",
+    department: "Content Development",
+    location: "Remote",
+    type: "Full-time"
+  },
+  {
+    title: "Mathematics Content Writer",
+    department: "Content Development",
+    location: "Remote",
+    type: "Part-time"
+  },
+  {
+    title: "Frontend Developer",
+    department: "Engineering",
+    location: "Hybrid (Bengaluru)",
+    type: "Full-time"
+  }
+];
+
 const Career = () => {
   const [email, setEmail] = useState("");
   const [isSubscribing, setIsSubscribing] = useState(false);
@@ -53,6 +75,50 @@ const Career = () => {
           </div>
         </section>
         
+        {/* Current Job Openings Section - ADDED */}
+        <section className="py-12 bg-primary/5">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto">
+              <div className="text-center mb-8">
+                <h2 className="text-2xl md:text-3xl font-bold mb-4">
+                  Current Openings
+                </h2>
+                <p className="text-lg text-muted-foreground">
+                  Join our team and help shape the future of education
+                </p>
+              </div>
+              
+              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 mb-8">
+                {featuredJobs.map((job, index) => (
+                  <CardCustom key={index} hover className="h-full">
+                    <CardContent className="pt-6">
+                      <h3 className="font-bold text-lg mb-2">{job.title}</h3>
+                      <div className="space-y-2 text-sm text-muted-foreground mb-4">
+                        <div className="flex items-center gap-2">
+                          <BriefcaseBusiness className="h-4 w-4" />
+                          <span>{job.department}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span>{job.location} • {job.type}</span>
+                        </div>
+                      </div>
+                      <Link to="/jobs" className="text-primary hover:underline text-sm font-medium">
+                        View details →
+                      </Link>
+                    </CardContent>
+                  </CardCustom>
+                ))}
+              </div>
+              
+              <div className="flex justify-center">
+                <Link to="/jobs">
+                  <ButtonCustom>View All Openings</ButtonCustom>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+        
         {/* Main Content */}
         <section className="py-16 container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
@@ -67,7 +133,7 @@ const Career = () => {
             
             <CardCustom glass className="mb-12 animate-slide-up animate-delay-200">
               <CardContent className="pt-6">
-                <p className="mb-6">
+                <p className="mb-6 text-muted-foreground">
                   Unknown IITians is a platform dedicated to providing high-quality educational content to help students and freshers succeed in their careers. We also offer opportunities for internships and hiring positions directly through our platform. All hirings for Unknown IITians will be posted here, with notifications sent out to those who have filled out the required forms.
                 </p>
                 
