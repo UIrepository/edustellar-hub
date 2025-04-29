@@ -12,7 +12,7 @@ type VerificationStatus = "idle" | "loading" | "success" | "error";
 
 const EmployeeVerification = () => {
   const [employeeId, setEmployeeId] = useState("");
-  const [email, setEmail] = useState("");
+  const [employeeName, setEmployeeName] = useState("");
   const [status, setStatus] = useState<VerificationStatus>("idle");
   const [employeeData, setEmployeeData] = useState<null | {
     name: string;
@@ -24,7 +24,7 @@ const EmployeeVerification = () => {
   const handleVerify = (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!employeeId.trim() || !email.trim()) {
+    if (!employeeId.trim() || !employeeName.trim()) {
       toast.error("Please fill in all fields");
       return;
     }
@@ -34,7 +34,7 @@ const EmployeeVerification = () => {
     // Simulate API call to verify employee
     setTimeout(() => {
       // Mock response - In a real app, this would be from your backend
-      if (employeeId === "UI123" && email === "test@example.com") {
+      if (employeeId === "UI123" && employeeName.toLowerCase() === "john doe") {
         setEmployeeData({
           name: "John Doe",
           position: "Content Developer",
@@ -53,7 +53,7 @@ const EmployeeVerification = () => {
   
   const resetForm = () => {
     setEmployeeId("");
-    setEmail("");
+    setEmployeeName("");
     setEmployeeData(null);
     setStatus("idle");
   };
@@ -88,7 +88,7 @@ const EmployeeVerification = () => {
               <CardContent>
                 <p className="mb-6 text-muted-foreground">
                   This verification portal allows current and former employees to verify their employment history 
-                  with Unknown IITians. Enter your employee ID and registered email address to get started.
+                  with Unknown IITians. Enter your employee ID and name to get started.
                 </p>
                 
                 {status !== "success" ? (
@@ -107,15 +107,14 @@ const EmployeeVerification = () => {
                         />
                       </div>
                       <div className="space-y-2">
-                        <label htmlFor="email" className="text-sm font-medium">
-                          Email Address
+                        <label htmlFor="employee-name" className="text-sm font-medium">
+                          Full Name
                         </label>
                         <Input 
-                          id="email"
-                          type="email"
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
-                          placeholder="Enter your registered email"
+                          id="employee-name"
+                          value={employeeName}
+                          onChange={(e) => setEmployeeName(e.target.value)}
+                          placeholder="Enter your full name"
                           disabled={status === "loading"}
                         />
                       </div>

@@ -1,3 +1,4 @@
+
 // Subject types
 export type Subject = {
   name: string;
@@ -86,10 +87,7 @@ export const dataScience: Record<Level, Course> = {
       { name: "Mathematics for Data Science I" },
       { name: "Statistics for Data Science I" },
       { name: "Computational Thinking" },
-      { name: "English I" },
-      { name: "Machine Learning Basics" },
-      { name: "Data Structures" },
-      { name: "Algorithms" }
+      { name: "English I" }
     ]
   }
 };
@@ -169,10 +167,7 @@ export const electronicSystems: Record<Level, Course> = {
       { name: "English I" },
       { name: "Math for Electronics I" },
       { name: "Electronic Systems Thinking and Circuits" },
-      { name: "Introduction to C Programming" },
-      { name: "Digital Logic" },
-      { name: "Mathematics for Electronics" },
-      { name: "Basic Signal Processing" }
+      { name: "Introduction to C Programming" }
     ]
   }
 };
@@ -213,10 +208,7 @@ export const communitiesData = {
         { name: "Mathematics for Data Science I" },
         { name: "Statistics for Data Science I" },
         { name: "Computational Thinking" },
-        { name: "English I" },
-        { name: "Machine Learning Basics" },
-        { name: "Data Structures" },
-        { name: "Algorithms" }
+        { name: "English I" }
       ]
     },
     qualifiers: "Data Science Qualifiers"
@@ -251,10 +243,7 @@ export const communitiesData = {
         { name: "English I" },
         { name: "Math for Electronics I" },
         { name: "Electronic Systems Thinking and Circuits" },
-        { name: "Introduction to C Programming" },
-        { name: "Digital Logic" },
-        { name: "Mathematics for Electronics" },
-        { name: "Basic Signal Processing" }
+        { name: "Introduction to C Programming" }
       ]
     },
     qualifiers: "Electronic Systems Qualifiers"
