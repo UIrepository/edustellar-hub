@@ -15,18 +15,18 @@ import {
 const carouselImages = [
   {
     id: 1,
-    src: "https://images.unsplash.com/photo-1546410531-bb4caa6b424d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1771&q=80",
-    alt: "NEET Preparation",
+    src: "https://images.unsplash.com/photo-1649972904349-6e44c42644a7?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1500&q=80",
+    alt: "Student studying with laptop",
   },
   {
     id: 2,
-    src: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80",
-    alt: "JEE Preparation",
+    src: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1500&q=80",
+    alt: "Student using laptop for coding",
   },
   {
     id: 3,
-    src: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80",
-    alt: "IIT-M BS Program",
+    src: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1500&q=80",
+    alt: "Student studying online",
   },
 ];
 
@@ -37,7 +37,7 @@ const ImageCarousel = () => {
         <CarouselContent>
           {carouselImages.map((image) => (
             <CarouselItem key={image.id} className="md:basis-full">
-              <div className="relative h-[300px] md:h-[500px] w-full overflow-hidden rounded-xl">
+              <div className="relative h-[400px] md:h-[600px] w-full overflow-hidden rounded-xl">
                 <img 
                   src={image.src} 
                   alt={image.alt}

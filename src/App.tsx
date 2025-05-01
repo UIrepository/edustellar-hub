@@ -14,8 +14,8 @@ import NotFound from "./pages/NotFound";
 import About from "./pages/About";
 import InternVerification from "./pages/InternVerification";
 import Career from "./pages/Career";
-import JobsCareer from "./pages/JobsCareer"; // Added new JobsCareer page
-import EmployeeVerification from "./pages/EmployeeVerification"; // Added new EmployeeVerification page
+import JobsCareer from "./pages/JobsCareer";
+import EmployeeVerification from "./pages/EmployeeVerification";
 import Partnerships from "./pages/Partnerships";
 import TermsAndConditions from "./pages/TermsAndConditions";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
@@ -33,7 +33,7 @@ const queryClient = new QueryClient();
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <AdminProvider>
-      <ThemeProvider defaultTheme="system">
+      <ThemeProvider>
         <TooltipProvider>
           <Toaster />
           <Sonner />
@@ -46,8 +46,8 @@ const App = () => (
               <Route path="/about" element={<About />} />
               <Route path="/intern-verification" element={<InternVerification />} />
               <Route path="/career" element={<Career />} />
-              <Route path="/jobs" element={<JobsCareer />} /> {/* Added new route */}
-              <Route path="/employee-verification" element={<EmployeeVerification />} /> {/* Added new route */}
+              <Route path="/jobs" element={<JobsCareer />} />
+              <Route path="/employee-verification" element={<EmployeeVerification />} />
               <Route path="/partnerships" element={<Partnerships />} />
               <Route path="/terms" element={<TermsAndConditions />} />
               <Route path="/privacy" element={<PrivacyPolicy />} />
@@ -56,6 +56,8 @@ const App = () => (
               <Route path="/admin" element={<Admin />} />
               <Route path="/admin-login" element={<AdminLogin />} />
               
+              <Route path="/neet" element={<NEET />} />
+              <Route path="/jee" element={<JEE />} />
               <Route path="/iitm-bs" element={<IITMBS />} />
               <Route path="/iitm-bs/subjects/:subjectId" element={<SubjectPage />} />
               

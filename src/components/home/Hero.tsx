@@ -23,25 +23,20 @@ const Hero = () => {
           
           {/* Main heading */}
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6 animate-slide-up animate-delay-200">
-            <span className="text-balance">Learn from India's top IITians for</span> <br />
-            <span className="text-primary">competitive exams</span>
+            <span className="text-balance">Student's Most Trusted Educational Website</span>
           </h1>
           
           {/* Subheading */}
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-8 text-pretty animate-slide-up animate-delay-300">
-            Join our community of dedicated students preparing for NEET, JEE, and IIT Madras BS programs with expert-led courses, structured study materials, and personalized mentorship.
+            Ignite Your Passion, Shape Your Future with Education!
           </p>
           
           {/* CTA buttons */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 animate-slide-up animate-delay-400">
-            <Link to="/register">
-              <ButtonCustom size="lg" icon={<ArrowRight />} iconPosition="right">
-                Get Started for Free
-              </ButtonCustom>
-            </Link>
-            <Link to="/courses">
-              <ButtonCustom variant="outline" size="lg">
-                Explore Courses
+            <Link to="/login">
+              <ButtonCustom size="lg" icon={<ArrowRight />} iconPosition="right" 
+                className="bg-blue-50 hover:bg-gradient-to-r hover:from-blue-100 hover:to-blue-50 transition-all duration-300 shadow-md hover:shadow-lg">
+                Get Started
               </ButtonCustom>
             </Link>
           </div>
@@ -49,10 +44,10 @@ const Hero = () => {
           {/* Stats */}
           <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8 animate-slide-up animate-delay-500">
             {[
-              { value: "10k+", label: "Students" },
-              { value: "95%", label: "Success Rate" },
-              { value: "150+", label: "Expert Mentors" },
-              { value: "500+", label: "Video Lectures" },
+              { value: "160k+", label: "Total Viewers" },
+              { value: "200+", label: "Notes & PYQs" },
+              { value: "98%", label: "Positive Feedback" },
+              { value: "5k+", label: "Community Members" },
             ].map((stat, i) => (
               <div key={i} className="flex flex-col items-center">
                 <div className="text-3xl md:text-4xl font-bold text-primary mb-2">
