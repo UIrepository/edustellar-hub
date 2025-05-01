@@ -1,5 +1,5 @@
 
-import React, { createContext, useContext, useEffect } from "react";
+import React, { createContext, useContext } from "react";
 
 type Theme = "light";
 
@@ -23,10 +23,10 @@ export function ThemeProvider({
 }: ThemeProviderProps) {
   const theme: Theme = "light";
 
-  useEffect(() => {
+  React.useEffect(() => {
     const root = window.document.documentElement;
     
-    // Remove previous class
+    // Remove any theme classes except light
     root.classList.remove("dark");
     
     // Add light theme
