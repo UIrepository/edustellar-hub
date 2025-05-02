@@ -8,8 +8,9 @@ import { BranchNotesTab } from "@/components/iitmbs/BranchNotesTab";
 import { ToolsTab } from "@/components/iitmbs/ToolsTab";
 import { PYQsTab } from "@/components/iitmbs/PYQsTab";
 import { CommunitiesTab } from "@/components/iitmbs/CommunitiesTab";
+import { PaidCoursesTab } from "@/components/iitmbs/PaidCoursesTab";
 import { CardCustom, CardHeader, CardTitle, CardContent } from "@/components/ui/card-custom";
-import { BookOpen, CalendarClock, Bell, FileQuestion, Send } from "lucide-react";
+import { BookOpen, CalendarClock, Bell, FileQuestion, Send, GraduationCap } from "lucide-react";
 import { DownloadButton } from "@/components/ui/download-button";
 
 const IITMBS = () => {
@@ -69,11 +70,12 @@ const IITMBS = () => {
         <section className="py-12">
           <div className="container mx-auto px-4">
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-              <TabsList className="w-full max-w-3xl mx-auto grid grid-cols-2 md:grid-cols-7">
+              <TabsList className="w-full max-w-3xl mx-auto grid grid-cols-2 md:grid-cols-8">
                 <TabsTrigger value="notes">Notes</TabsTrigger>
                 <TabsTrigger value="tools">Tools</TabsTrigger>
                 <TabsTrigger value="pyqs">PYQs</TabsTrigger>
                 <TabsTrigger value="communities">Communities</TabsTrigger>
+                <TabsTrigger value="paid-courses">Paid Courses</TabsTrigger>
                 <TabsTrigger value="syllabus">Syllabus</TabsTrigger>
                 <TabsTrigger value="news">News</TabsTrigger>
                 <TabsTrigger value="dates">Important Dates</TabsTrigger>
@@ -91,9 +93,13 @@ const IITMBS = () => {
                 <PYQsTab />
               </TabsContent>
               
-              {/* Communities Tab */}
               <TabsContent value="communities" className="mt-8">
                 <CommunitiesTab />
+              </TabsContent>
+              
+              {/* New Paid Courses Tab */}
+              <TabsContent value="paid-courses" className="mt-8">
+                <PaidCoursesTab />
               </TabsContent>
               
               {/* Syllabus Tab */}
