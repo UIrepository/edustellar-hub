@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 import { CardCustom, CardHeader, CardTitle, CardContent } from "@/components/ui/card-custom";
-import { FileText, Send } from "lucide-react";
+import { FileText, Send, ChevronLeft } from "lucide-react";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { dataScience, electronicSystems, Level, Branch } from "@/data/iitmbsData";
 import { DownloadButton } from "@/components/ui/download-button";
@@ -13,6 +13,7 @@ export const BranchNotesTab = () => {
   const [selectedLevel, setSelectedLevel] = useState<Level>("foundation");
   const [selectedBranch, setSelectedBranch] = useState<Branch>("data-science");
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedSubject, setSelectedSubject] = useState<string | null>(null);
 
   // Get the current branch data based on selection
   const getBranchData = () => {
@@ -25,6 +26,11 @@ export const BranchNotesTab = () => {
   const filteredSubjects = currentLevelData.subjects.filter((subject) =>
     subject.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  // Handle back button click
+  const handleBack = () => {
+    setSelectedSubject(null);
+  };
 
   return (
     <div className="space-y-6">
@@ -44,98 +50,139 @@ export const BranchNotesTab = () => {
         </CardContent>
       </CardCustom>
 
-      {/* Branch and Level Filters */}
-      <div className="flex flex-col sm:flex-row gap-4 justify-between">
+      {selectedSubject ? (
         <div>
-          <h3 className="text-lg font-medium mb-2">Branch</h3>
-          <ToggleGroup 
-            type="single" 
-            value={selectedBranch}
-            onValueChange={(value) => value && setSelectedBranch(value as Branch)}
-            className="flex flex-wrap gap-2"
+          {/* Back button for navigation */}
+          <ButtonCustom 
+            variant="ghost" 
+            size="sm" 
+            onClick={handleBack} 
+            className="mb-4"
           >
-            <ToggleGroupItem value="data-science" className="px-4 py-2">
-              Data Science
-            </ToggleGroupItem>
-            <ToggleGroupItem value="electronic-systems" className="px-4 py-2">
-              Electronic Systems
-            </ToggleGroupItem>
-          </ToggleGroup>
-        </div>
-        
-        <div>
-          <h3 className="text-lg font-medium mb-2">Level</h3>
-          <ToggleGroup 
-            type="single" 
-            value={selectedLevel}
-            onValueChange={(value) => value && setSelectedLevel(value as Level)}
-            className="flex flex-wrap gap-2"
-          >
-            <ToggleGroupItem value="foundation" className="px-3 py-2">
-              Foundation
-            </ToggleGroupItem>
-            <ToggleGroupItem value="diploma" className="px-3 py-2">
-              Diploma
-            </ToggleGroupItem>
-            <ToggleGroupItem value="degree" className="px-3 py-2">
-              BS Degree
-            </ToggleGroupItem>
-            <ToggleGroupItem value="qualifier" className="px-3 py-2">
-              Qualifier
-            </ToggleGroupItem>
-          </ToggleGroup>
-        </div>
-      </div>
+            <ChevronLeft className="h-4 w-4 mr-2" />
+            Back to Subjects
+          </ButtonCustom>
 
-      {/* Search Bar */}
-      <div className="w-full">
-        <SearchBar 
-          value={searchQuery} 
-          onChange={setSearchQuery}
-          placeholder="Search courses..."
-        />
-      </div>
-
-      <div className="mt-8">
-        <h2 className="text-2xl font-bold mb-4">
-          {currentLevelData.title} - {selectedBranch === "data-science" ? "Data Science" : "Electronic Systems"}
-        </h2>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {filteredSubjects.map((subject) => (
-            <CardCustom key={subject.name} glass className="col-span-1">
-              <CardHeader>
-                <CardTitle>{subject.name}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <FileText className="h-4 w-4" />
-                    <span>Course Notes</span>
-                  </div>
-                  <div className="flex gap-2">
+          <h2 className="text-2xl font-bold mb-4">
+            {selectedSubject} Notes
+          </h2>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Generate some sample notes for the selected subject */}
+            {['Lecture Notes', 'Tutorial Solutions', 'Practice Problems', 'Summary Notes'].map((noteType, index) => (
+              <CardCustom key={index} glass className="col-span-1">
+                <CardHeader>
+                  <CardTitle className="text-lg">{selectedSubject} - {noteType}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <FileText className="h-4 w-4" />
+                      <span>{noteType}</span>
+                    </div>
                     <DownloadButton 
-                      fileName={`${subject.name.toLowerCase().replace(/\s+/g, '_')}_notes.pdf`}
+                      fileName={`${selectedSubject.toLowerCase().replace(/\s+/g, '_')}_${noteType.toLowerCase().replace(/\s+/g, '_')}.pdf`}
                       initialCount={Math.floor(Math.random() * 100) + 10}
                     />
-                    <Link to={`/iitm-bs/subjects/${subject.name.toLowerCase().replace(/\s+/g, '-')}`}>
-                      <ButtonCustom size="sm" variant="outline">
-                        View All Notes
-                      </ButtonCustom>
-                    </Link>
                   </div>
-                </div>
-              </CardContent>
-            </CardCustom>
-          ))}
-        </div>
-
-        {filteredSubjects.length === 0 && (
-          <div className="text-center py-8 text-muted-foreground">
-            No courses found matching your search criteria.
+                </CardContent>
+              </CardCustom>
+            ))}
           </div>
-        )}
-      </div>
+        </div>
+      ) : (
+        <>
+          {/* Branch and Level Filters */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-between">
+            <div>
+              <h3 className="text-lg font-medium mb-2">Branch</h3>
+              <ToggleGroup 
+                type="single" 
+                value={selectedBranch}
+                onValueChange={(value) => value && setSelectedBranch(value as Branch)}
+                className="flex flex-wrap gap-2"
+              >
+                <ToggleGroupItem value="data-science" className="px-4 py-2">
+                  Data Science
+                </ToggleGroupItem>
+                <ToggleGroupItem value="electronic-systems" className="px-4 py-2">
+                  Electronic Systems
+                </ToggleGroupItem>
+              </ToggleGroup>
+            </div>
+            
+            <div>
+              <h3 className="text-lg font-medium mb-2">Level</h3>
+              <ToggleGroup 
+                type="single" 
+                value={selectedLevel}
+                onValueChange={(value) => value && setSelectedLevel(value as Level)}
+                className="flex flex-wrap gap-2"
+              >
+                <ToggleGroupItem value="foundation" className="px-3 py-2">
+                  Foundation
+                </ToggleGroupItem>
+                <ToggleGroupItem value="diploma" className="px-3 py-2">
+                  Diploma
+                </ToggleGroupItem>
+                <ToggleGroupItem value="degree" className="px-3 py-2">
+                  BS Degree
+                </ToggleGroupItem>
+                <ToggleGroupItem value="qualifier" className="px-3 py-2">
+                  Qualifier
+                </ToggleGroupItem>
+              </ToggleGroup>
+            </div>
+          </div>
+
+          {/* Search Bar */}
+          <div className="w-full">
+            <SearchBar 
+              value={searchQuery} 
+              onChange={setSearchQuery}
+              placeholder="Search courses..."
+            />
+          </div>
+
+          <div className="mt-8">
+            <h2 className="text-2xl font-bold mb-4">
+              {currentLevelData.title} - {selectedBranch === "data-science" ? "Data Science" : "Electronic Systems"}
+            </h2>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {filteredSubjects.map((subject) => (
+                <CardCustom 
+                  key={subject.name} 
+                  glass 
+                  className="col-span-1"
+                  hover 
+                  clickable
+                  onClick={() => setSelectedSubject(subject.name)}
+                >
+                  <CardHeader>
+                    <CardTitle>{subject.name}</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <FileText className="h-4 w-4" />
+                        <span>Course Notes</span>
+                      </div>
+                      <span className="text-sm text-muted-foreground">4 documents available</span>
+                    </div>
+                  </CardContent>
+                </CardCustom>
+              ))}
+            </div>
+
+            {filteredSubjects.length === 0 && (
+              <div className="text-center py-8 text-muted-foreground">
+                No courses found matching your search criteria.
+              </div>
+            )}
+          </div>
+        </>
+      )}
     </div>
   );
 };

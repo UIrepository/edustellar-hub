@@ -1,22 +1,27 @@
 
 import { useState } from "react";
 import { CardCustom, CardHeader, CardTitle, CardContent } from "@/components/ui/card-custom";
-import { FileQuestion } from "lucide-react";
+import { FileQuestion, ChevronLeft } from "lucide-react";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Level, Branch, pyqsData } from "@/data/iitmbsData";
 import { DownloadButton } from "@/components/ui/download-button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { ButtonCustom } from "@/components/ui/button-custom";
 
 type ExamType = "quiz-1" | "quiz-2" | "end-term";
 
 export const PYQsTab = () => {
   const [selectedLevel, setSelectedLevel] = useState<Level>("foundation");
   const [selectedBranch, setSelectedBranch] = useState<Branch>("data-science");
-  const [selectedExamType, setSelectedExamType] = useState<ExamType>("quiz-1");
+  const [selectedYear, setSelectedYear] = useState<string | null>(null);
   
   // Years for demonstration - in a real app, these would be dynamically generated from data
   const years = ["2023", "2022", "2021"];
+
+  // Function to go back to year selection
+  const handleBack = () => {
+    setSelectedYear(null);
+  };
 
   return (
     <div className="space-y-6">
@@ -59,57 +64,157 @@ export const PYQsTab = () => {
         </div>
       </div>
 
-      {/* Exam Type Filter */}
-      <div>
-        <h3 className="text-lg font-medium mb-2">Exam Type</h3>
-        <Tabs 
-          value={selectedExamType} 
-          onValueChange={(value) => setSelectedExamType(value as ExamType)}
-          className="w-full"
-        >
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="quiz-1">Quiz 1</TabsTrigger>
-            <TabsTrigger value="quiz-2">Quiz 2</TabsTrigger>
-            <TabsTrigger value="end-term">End Term</TabsTrigger>
-          </TabsList>
-        </Tabs>
-      </div>
+      {selectedYear ? (
+        <div>
+          {/* Back button for navigation */}
+          <ButtonCustom 
+            variant="ghost" 
+            size="sm" 
+            onClick={handleBack} 
+            className="mb-4"
+          >
+            <ChevronLeft className="h-4 w-4 mr-2" />
+            Back to Year Selection
+          </ButtonCustom>
 
-      {/* Year-wise Collapsible Sections */}
-      <div className="space-y-4 mt-6">
-        {years.map((year) => (
-          <Collapsible key={year} className="w-full border rounded-lg overflow-hidden">
-            <CollapsibleTrigger className="flex justify-between items-center w-full p-4 text-left font-medium hover:bg-secondary/20">
-              <span>{year} Papers</span>
-              <div className="text-sm text-muted-foreground">3 sets available</div>
-            </CollapsibleTrigger>
-            <CollapsibleContent className="border-t p-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {["Set A", "Set B", "Set C"].map((set) => (
-                  <CardCustom key={set} glass hover>
-                    <CardHeader className="pb-2">
-                      <CardTitle className="text-base flex items-center gap-2">
-                        <FileQuestion className="h-4 w-4" />
-                        {selectedExamType === "end-term" ? "End Term" : `Quiz ${selectedExamType === "quiz-1" ? "1" : "2"}`} {year} - {set}
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="text-sm text-muted-foreground mb-3">
-                        {selectedBranch === "data-science" ? "Data Science" : "Electronic Systems"} ({selectedLevel})
-                      </div>
-                      <DownloadButton 
-                        fileName={`IITM_BS_${selectedBranch}_${selectedLevel}_${selectedExamType}_${year}_${set.replace(" ", "_").toLowerCase()}.pdf`}
-                        initialCount={Math.floor(Math.random() * 100) + 20}
-                        label="Download"
-                      />
-                    </CardContent>
-                  </CardCustom>
-                ))}
-              </div>
-            </CollapsibleContent>
-          </Collapsible>
-        ))}
-      </div>
+          <h2 className="text-xl font-bold mb-4">
+            {selectedYear} Papers - {selectedBranch === "data-science" ? "Data Science" : "Electronic Systems"} ({selectedLevel})
+          </h2>
+
+          <div className="space-y-6">
+            {/* Exam Types Accordion */}
+            <Accordion type="single" collapsible className="w-full">
+              <AccordionItem value="quiz-1" className="border rounded-lg overflow-hidden mb-4">
+                <AccordionTrigger className="px-4 py-3 hover:bg-secondary/20">
+                  <div className="flex items-center gap-2">
+                    <FileQuestion className="h-5 w-5" />
+                    <span className="font-medium">Quiz 1</span>
+                  </div>
+                </AccordionTrigger>
+                <AccordionContent className="px-4 pt-2 pb-4 border-t">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {["Set A", "Set B", "Set C"].map((set) => (
+                      <CardCustom key={set} glass hover>
+                        <CardHeader className="pb-2">
+                          <CardTitle className="text-base flex items-center gap-2">
+                            <FileQuestion className="h-4 w-4" />
+                            Quiz 1 {selectedYear} - {set}
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="text-sm text-muted-foreground mb-3">
+                            {selectedBranch === "data-science" ? "Data Science" : "Electronic Systems"} ({selectedLevel})
+                          </div>
+                          <DownloadButton 
+                            fileName={`IITM_BS_${selectedBranch}_${selectedLevel}_quiz-1_${selectedYear}_${set.replace(" ", "_").toLowerCase()}.pdf`}
+                            initialCount={Math.floor(Math.random() * 100) + 20}
+                            label="Download"
+                          />
+                        </CardContent>
+                      </CardCustom>
+                    ))}
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem value="quiz-2" className="border rounded-lg overflow-hidden mb-4">
+                <AccordionTrigger className="px-4 py-3 hover:bg-secondary/20">
+                  <div className="flex items-center gap-2">
+                    <FileQuestion className="h-5 w-5" />
+                    <span className="font-medium">Quiz 2</span>
+                  </div>
+                </AccordionTrigger>
+                <AccordionContent className="px-4 pt-2 pb-4 border-t">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {["Set A", "Set B", "Set C"].map((set) => (
+                      <CardCustom key={set} glass hover>
+                        <CardHeader className="pb-2">
+                          <CardTitle className="text-base flex items-center gap-2">
+                            <FileQuestion className="h-4 w-4" />
+                            Quiz 2 {selectedYear} - {set}
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="text-sm text-muted-foreground mb-3">
+                            {selectedBranch === "data-science" ? "Data Science" : "Electronic Systems"} ({selectedLevel})
+                          </div>
+                          <DownloadButton 
+                            fileName={`IITM_BS_${selectedBranch}_${selectedLevel}_quiz-2_${selectedYear}_${set.replace(" ", "_").toLowerCase()}.pdf`}
+                            initialCount={Math.floor(Math.random() * 100) + 15}
+                            label="Download"
+                          />
+                        </CardContent>
+                      </CardCustom>
+                    ))}
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem value="end-term" className="border rounded-lg overflow-hidden">
+                <AccordionTrigger className="px-4 py-3 hover:bg-secondary/20">
+                  <div className="flex items-center gap-2">
+                    <FileQuestion className="h-5 w-5" />
+                    <span className="font-medium">End Term</span>
+                  </div>
+                </AccordionTrigger>
+                <AccordionContent className="px-4 pt-2 pb-4 border-t">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {["Set A", "Set B", "Set C"].map((set) => (
+                      <CardCustom key={set} glass hover>
+                        <CardHeader className="pb-2">
+                          <CardTitle className="text-base flex items-center gap-2">
+                            <FileQuestion className="h-4 w-4" />
+                            End Term {selectedYear} - {set}
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="text-sm text-muted-foreground mb-3">
+                            {selectedBranch === "data-science" ? "Data Science" : "Electronic Systems"} ({selectedLevel})
+                          </div>
+                          <DownloadButton 
+                            fileName={`IITM_BS_${selectedBranch}_${selectedLevel}_end-term_${selectedYear}_${set.replace(" ", "_").toLowerCase()}.pdf`}
+                            initialCount={Math.floor(Math.random() * 100) + 25}
+                            label="Download"
+                          />
+                        </CardContent>
+                      </CardCustom>
+                    ))}
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+          </div>
+        </div>
+      ) : (
+        <div className="mt-6">
+          <h2 className="text-xl font-bold mb-4">Select Year</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+            {years.map((year) => (
+              <CardCustom 
+                key={year} 
+                glass 
+                hover 
+                clickable
+                className="transition-all"
+                onClick={() => setSelectedYear(year)}
+              >
+                <CardHeader>
+                  <CardTitle>{year} Papers</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground mb-3">
+                    Access Quiz 1, Quiz 2, and End Term papers for {year}
+                  </p>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-medium">3 exam types available</span>
+                    <span className="text-sm text-muted-foreground">9 sets total</span>
+                  </div>
+                </CardContent>
+              </CardCustom>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

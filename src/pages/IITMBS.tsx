@@ -75,7 +75,9 @@ const IITMBS = () => {
                 <TabsTrigger value="tools">Tools</TabsTrigger>
                 <TabsTrigger value="pyqs">PYQs</TabsTrigger>
                 <TabsTrigger value="communities">Communities</TabsTrigger>
-                <TabsTrigger value="paid-courses">Paid Courses</TabsTrigger>
+                <TabsTrigger value="paid-courses" className="bg-amber-100/50 text-amber-900 hover:bg-amber-200/50 data-[state=active]:bg-amber-200 data-[state=active]:text-amber-900">
+                  Paid Courses
+                </TabsTrigger>
                 <TabsTrigger value="syllabus">Syllabus</TabsTrigger>
                 <TabsTrigger value="news">News</TabsTrigger>
                 <TabsTrigger value="dates">Important Dates</TabsTrigger>
@@ -97,7 +99,7 @@ const IITMBS = () => {
                 <CommunitiesTab />
               </TabsContent>
               
-              {/* New Paid Courses Tab */}
+              {/* Paid Courses Tab with golden highlight */}
               <TabsContent value="paid-courses" className="mt-8">
                 <PaidCoursesTab />
               </TabsContent>
