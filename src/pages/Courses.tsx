@@ -128,6 +128,32 @@ const coursesData = [
     price: 1,
     free: true
   },
+  // Adding Upskill courses
+  {
+    id: "upskill-web-development",
+    title: "Web Development Bootcamp",
+    description: "Learn modern web development with HTML, CSS, JavaScript, React and Node.js to build full-stack applications.",
+    category: "Upskill",
+    image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2000&q=80",
+    duration: "12 weeks",
+    students: 4750,
+    lessons: 60,
+    price: 1,
+    free: false
+  },
+  {
+    id: "upskill-data-science",
+    title: "Data Science & Machine Learning",
+    description: "Master data analysis, visualization and machine learning algorithms to solve real-world problems.",
+    category: "Upskill",
+    image: "https://images.unsplash.com/photo-1518186285589-2f7649de83e0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2000&q=80",
+    duration: "14 weeks",
+    students: 3980,
+    lessons: 70,
+    price: 1,
+    free: false,
+    featured: true
+  },
 ];
 
 interface CourseCardProps {
@@ -379,7 +405,7 @@ const Courses = () => {
     return matchesSearch && matchesCategory && matchesFreeFilter;
   });
   
-  const categories = ["NEET", "JEE", "IIT-M BS"];
+  const categories = ["NEET", "JEE", "IIT-M BS", "Upskill"];
   
   const resetFilters = () => {
     setSearchTerm("");
@@ -401,7 +427,7 @@ const Courses = () => {
                 Explore Our Courses
               </h1>
               <p className="text-lg text-muted-foreground animate-slide-up animate-delay-100">
-                Browse our collection of specialized courses designed to help you excel in NEET, JEE, and IIT-M BS programs
+                Browse our collection of specialized courses designed to help you excel in NEET, JEE, IIT-M BS programs, and gain valuable upskilling opportunities
               </p>
             </div>
           </div>
