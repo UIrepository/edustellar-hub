@@ -5,6 +5,7 @@ import { FileText, ChevronLeft } from "lucide-react";
 import { DownloadButton } from "@/components/ui/download-button";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
 import { ButtonCustom } from "@/components/ui/button-custom";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
 // Subject data with chapters and notes
 const subjectsData = {
@@ -162,54 +163,77 @@ const subjectsData = {
       }
     }
   },
-  "Mathematics": {
-    "11": [
-      {
-        chapter: "Sets and Functions",
-        notes: [
-          { title: "Sets and Relations", downloads: 172 },
-          { title: "Functions and their Types", downloads: 146 }
+  "Biology": {
+    "types": {
+      "Botany": {
+        "11": [
+          {
+            chapter: "Plant Kingdom",
+            notes: [
+              { title: "Classification of Plants", downloads: 198 },
+              { title: "Plant Life Cycle", downloads: 182 }
+            ]
+          },
+          {
+            chapter: "Plant Anatomy",
+            notes: [
+              { title: "Tissues and Tissue Systems", downloads: 175 },
+              { title: "Secondary Growth", downloads: 158 }
+            ]
+          }
+        ],
+        "12": [
+          {
+            chapter: "Reproduction in Plants",
+            notes: [
+              { title: "Asexual Reproduction", downloads: 186 },
+              { title: "Sexual Reproduction", downloads: 205 }
+            ]
+          },
+          {
+            chapter: "Genetics and Evolution",
+            notes: [
+              { title: "Mendel's Laws", downloads: 193 },
+              { title: "Plant Breeding", downloads: 168 }
+            ]
+          }
         ]
       },
-      {
-        chapter: "Algebra",
-        notes: [
-          { title: "Complex Numbers", downloads: 158 },
-          { title: "Quadratic Equations", downloads: 189 }
-        ]
-      },
-      {
-        chapter: "Coordinate Geometry",
-        notes: [
-          { title: "Straight Lines", downloads: 165 },
-          { title: "Circles", downloads: 147 }
+      "Zoology": {
+        "11": [
+          {
+            chapter: "Animal Kingdom",
+            notes: [
+              { title: "Classification of Animals", downloads: 204 },
+              { title: "Animal Tissues", downloads: 187 }
+            ]
+          },
+          {
+            chapter: "Human Physiology",
+            notes: [
+              { title: "Digestive System", downloads: 212 },
+              { title: "Respiratory System", downloads: 196 }
+            ]
+          }
+        ],
+        "12": [
+          {
+            chapter: "Human Reproduction",
+            notes: [
+              { title: "Male Reproductive System", downloads: 189 },
+              { title: "Female Reproductive System", downloads: 215 }
+            ]
+          },
+          {
+            chapter: "Evolution",
+            notes: [
+              { title: "Origin of Life", downloads: 176 },
+              { title: "Human Evolution", downloads: 195 }
+            ]
+          }
         ]
       }
-    ],
-    "12": [
-      {
-        chapter: "Calculus",
-        notes: [
-          { title: "Limits and Continuity", downloads: 193 },
-          { title: "Differentiation", downloads: 204 },
-          { title: "Integration", downloads: 187 }
-        ]
-      },
-      {
-        chapter: "Vectors and 3D Geometry",
-        notes: [
-          { title: "Vectors in Space", downloads: 156 },
-          { title: "Planes and Lines in 3D", downloads: 143 }
-        ]
-      },
-      {
-        chapter: "Probability",
-        notes: [
-          { title: "Probability Basics", downloads: 178 },
-          { title: "Random Variables and Distributions", downloads: 137 }
-        ]
-      }
-    ]
+    }
   }
 };
 
@@ -223,7 +247,7 @@ export const NotesTab = () => {
     setSelectedType(null);
   };
 
-  // Select type (for Chemistry)
+  // Select type (for Biology or Chemistry)
   const selectType = (type: string) => {
     setSelectedType(type);
   };
@@ -247,7 +271,7 @@ export const NotesTab = () => {
       <div className="flex items-center gap-2">
         <span className="text-sm text-muted-foreground">{note.downloads} downloads</span>
         <DownloadButton
-          fileName={`jee_${subject.toLowerCase()}_${chapterName.toLowerCase().replace(/\s+/g, '_')}_${note.title.toLowerCase().replace(/\s+/g, '_')}.pdf`}
+          fileName={`neet_${subject.toLowerCase()}_${chapterName.toLowerCase().replace(/\s+/g, '_')}_${note.title.toLowerCase().replace(/\s+/g, '_')}.pdf`}
           initialCount={note.downloads}
         />
       </div>
@@ -269,10 +293,10 @@ export const NotesTab = () => {
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground mb-4">
-                  Comprehensive {subject.toLowerCase()} notes covering all JEE topics with solved examples.
+                  Comprehensive {subject.toLowerCase()} notes covering all NEET topics with diagrams and examples.
                 </p>
                 <DownloadButton
-                  fileName={`jee_${subject.toLowerCase()}_notes.pdf`}
+                  fileName={`neet_${subject.toLowerCase()}_notes.pdf`}
                   label="Download Notes"
                   initialCount={Math.floor(Math.random() * 200) + 50}
                 />
@@ -295,30 +319,28 @@ export const NotesTab = () => {
             <h2 className="text-2xl font-bold">{selectedSubject} Notes</h2>
           </div>
           
-          {/* For Chemistry, show type selection */}
-          {selectedSubject === "Chemistry" && !selectedType ? (
+          {/* For Chemistry and Biology, show type selection */}
+          {(selectedSubject === "Chemistry" || selectedSubject === "Biology") && !selectedType ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {Object.keys((subjectsData[selectedSubject as keyof typeof subjectsData] as any).types).map((type) => (
                 <CardCustom key={type} glass hover onClick={() => selectType(type)}>
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <FileText className="h-5 w-5" />
-                      {type} Chemistry
+                      {type}
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
                     <p className="text-muted-foreground mb-4">
-                      {type === "Organic" 
-                        ? "Carbon compounds and their reactions" 
-                        : type === "Inorganic" 
-                          ? "Elements, their compounds and properties"
-                          : "Physical properties and laws of chemical systems"}
+                      {selectedSubject === "Biology" 
+                        ? `${type === "Botany" ? "Plant-related" : "Animal-related"} topics and concepts`
+                        : `${type} chemistry concepts and formulas`}
                     </p>
                     <ButtonCustom 
                       variant="outline"
                       className="w-full"
                     >
-                      View {type} Chemistry Notes
+                      View {type} Notes
                     </ButtonCustom>
                   </CardContent>
                 </CardCustom>
